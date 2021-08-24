@@ -1,13 +1,10 @@
 <html>
   <head>
-    <title>TomatenAPI</title>
+    <title>Short-URL</title>
     <script>
-      function loadpage() {
-        document.getElementById("api").src = "https://node2.chaoshosting.tk:25509" + location.pathname + location.search
+      window.onload = function() {
+        window.location = "https://node2.chaoshosting.tk:25508/s" + location.pathname + location.search
       }
     </script>
   </head>
-  <body onload="loadpage()">
-    <iframe title="TomatenAPI" id="api" width="100%" height="100%" style="border: none;"></iframe>
-  </body>
 </html>
