@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<title>Short-URL erstellen</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://tomatenkuchen.eu/assets/images/icon.ico" rel="shortcut icon" type="image/x-icon" />
+		<link href="https://tomatenkuchen.eu/assets/images/icon.ico" rel="icon" type="image/x-icon" />
+		<meta name="description" content="Short-URL erstellen" />
+
+		<style>
+			* {
+				font-family: "Poppins", Helvetica, sans-serif;
+				font-size: 105%;
+				background: #EAEAEA;
+			}
+			button, input {
+				border-radius: 5px;
+				margin: 7px 0;
+			}
+			button {
+				padding: 5px;
+			}
+		</style>
+		<script>
+			function setup() {
+				var dateElem = document.getElementById("date")
+				dateElem.min = new Date().toISOString().slice(0, -8)
+				dateElem.value = new Date().toISOString().slice(0, -8)
+
+				const formElem = document.getElementById("createForm")
+				formElem.addEventListener("submit", e => {
+					e.preventDefault()
+					createURL()
+				})
+			}
+
+			function createURL() {
+				const shorturl = document.getElementById("url").value
+				const name = document.getElementById("name").value
+				const date = document.getElementById("date").value
+
+				var params = JSON.stringify({url: shorturl, name: name, date: date})
+				var xhr = new XMLHttpRequest()
+				xhr.onreadystatechange = function() {
+					if (this.readyState == 4) document.getElementById("response").innerText = this.responseText
+				}
+				xhr.open("POST", "https://node2.chaoshosting.tk:25508/short", true)
+				xhr.setRequestHeader("Content-Type", "application/json")
+
+				xhr.send(params)
+			}
+		</script>
+	</head>
+	<body onload="setup()">
+		<h1 id="response"></h1>
+		<h2>Es wurden <b>{CREATED}</b> Short-URLs erstellt!</h2>
+		<br>
+		<form autocomplete="off" id="createForm">
+			<input id="url" type="url" name="shorturl" placeholder="URL angeben" required>
+			<br>
+			<input id="name" type="text" name="shortname" placeholder="Short-Name angeben" required>
+			<br>
+			<input id="date" type="datetime-local" name="shortdate" required>
+			<br>
+			<button type="submit">Erstellen</button>
+		</form>
+	</body>
+</html>
