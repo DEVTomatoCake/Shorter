@@ -25,7 +25,7 @@
 			function setup() {
 				var dateElem = document.getElementById("date")
 				dateElem.min = new Date().toISOString().slice(0, -8)
-				dateElem.value = new Date().toISOString().slice(0, -8)
+				dateElem.value = new Date(Date.now() + 432000000).toISOString().slice(0, -8)
 
 				const formElem = document.getElementById("createForm")
 				formElem.addEventListener("submit", e => {
@@ -39,15 +39,25 @@
 				const name = document.getElementById("name").value
 				const date = document.getElementById("date").value
 
-				var params = JSON.stringify({url: shorturl, name: name, date: date})
+				var params = JSON.stringify({url: shorturl, name, date})
 				var xhr = new XMLHttpRequest()
 				xhr.onreadystatechange = function() {
-					if (this.readyState == 4) document.getElementById("response").innerText = this.responseText
+					if (this.readyState == 4) document.getElementById("response").innerHTML = this.responseText
 				}
 				xhr.open("POST", "https://node2.chaoshosting.tk:25508/short", true)
 				xhr.setRequestHeader("Content-Type", "application/json")
 
 				xhr.send(params)
+			}
+
+			function copy() {
+			  	var copyText = document.getElementById("resulturl").href
+
+			  	navigator.clipboard.writeText(copyText).then(function() {
+				  	console.log('Async: Copying to clipboard was successful!')
+				}, function(err) {
+				  	console.error('Async: Could not copy text: ', err)
+				})
 			}
 		</script>
 	</head>
