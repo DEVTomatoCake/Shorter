@@ -44,7 +44,7 @@
 				xhr.onreadystatechange = function() {
 					if (this.readyState == 4) document.getElementById("response").innerHTML = this.responseText
 				}
-				xhr.open("POST", "https://node2.chaoshosting.tk:25508/short", true)
+				xhr.open("POST", "https://api.tomatenkuchen.eu/short", true)
 				xhr.setRequestHeader("Content-Type", "application/json")
 
 				xhr.send(params)
@@ -53,10 +53,8 @@
 			function copy() {
 			  	var copyText = document.getElementById("resulturl").href
 
-			  	navigator.clipboard.writeText(copyText).then(function() {
-				  	console.log('Async: Copying to clipboard was successful!')
-				}, function(err) {
-				  	console.error('Async: Could not copy text: ', err)
+			  	navigator.clipboard.writeText(copyText).catch(err => {
+				  	console.error("Link kann nicht kopiert werden", err)
 				})
 			}
 		</script>
