@@ -9,7 +9,7 @@
 
 		<style>
 			* {
-				font-family: "Poppins", Helvetica, sans-serif;
+				font-family: Helvetica, sans-serif;
 				font-size: 105%;
 				background: #ECECEC;
 			}
@@ -18,14 +18,14 @@
 				margin: 7px 0;
 			}
 			button {
-				padding: 5px;
+				padding: 7px;
 			}
 		</style>
 		<script>
 			function setup() {
 				var dateElem = document.getElementById("date")
 				dateElem.min = new Date().toISOString().slice(0, -8)
-				dateElem.value = new Date(Date.now() + 432000000).toISOString().slice(0, -8)
+				dateElem.value = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, -8)
 
 				const formElem = document.getElementById("createForm")
 				formElem.addEventListener("submit", e => {
@@ -51,10 +51,9 @@
 			}
 
 			function copy() {
-			  	var copyText = document.getElementById("resulturl").href
-
-			  	navigator.clipboard.writeText(copyText).catch(err => {
-					console.error("Link kann nicht kopiert werden", err)
+			  	navigator.clipboard.writeText(document.getElementById("resulturl").href).catch(err => {
+					alert("Link konnte nicht kopiert werden")
+					console.error("Link konnte nicht kopiert werden", err)
 				})
 			}
 		</script>
@@ -63,7 +62,7 @@
 		<h1 id="response"></h1>
 		<br>
 		<form autocomplete="off" id="createForm">
-			<input id="url" type="url" name="shorturl" placeholder="URL angeben" required>
+			<input id="url" type="url" name="shorturl" placeholder="Ziel-URL angeben" required>
 			<br>
 			<input id="name" type="text" name="shortname" placeholder="Short-Name angeben">
 			<br>
