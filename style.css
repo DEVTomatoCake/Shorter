@@ -58,3 +58,26 @@ fieldset {
 span {
     color: red;
 }
+
+select {
+    border-radius: 5px;
+    margin: 7px 0;
+    background: #0b487e;
+    padding: 2px;
+    border: 3px solid #2b38cf;
+    box-shadow: 0 0 10px #0077ff;
+    font-family: Helvetica, sans-serif;
+    font-size: 120%;
+    color:rgb(252, 250, 250);
+    border: 1px solid #fff;
+}
+
+.submit {
+    position: relative;
+    left: 135px;
+}
+
+.custom_pos_1 {
+    position: relative;
+    left: 154px;
+}
