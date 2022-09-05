@@ -10,16 +10,28 @@
 		<link rel="stylesheet" href="style.css"/>
 	</head>
 	<body onload="setup()">
-		<h1 id="response"></h1>
-		<br>
-		<form autocomplete="off" id="createForm" class="container">
-			<input id="url" type="url" name="shorturl" placeholder="Ziel-URL angeben" required>
+		<main class="container">
+			<h1>Short-URL erstellen</h1>
 			<br>
-			<input id="name" type="text" name="shortname" placeholder="Short-Name angeben">
+			<form autocomplete="off" id="createForm">
+				<label for="url">URL<span>*</span>:</label>
+				<input id="url" type="text" name="shorturl">
+				<br>
+				<label for="name">Short-Name:</label>
+				<input id="name" type="text" name="shortname">
+				<br>
+				<label for="date">Ablaufdatum<span>*</span>:</label>
+				<input id="date" type="datetime-local" name="shortdate">
+				<br>
+				<button type="submit">Erstellen</button>
+			</form>
 			<br>
-			<input id="date" type="datetime-local" name="shortdate" required class="cursor">
-			<br>
-			<button type="submit" class="cursor">Erstellen</button>
-		</form>
+			<fieldset>
+				<legend>Status:</legend>
+				<h3 id="response">Warte auf Eingabe...</h3>
+			</fieldset>
+		</main>
+		<footer>
+		</footer>
 	</body>
 </html>
