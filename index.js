@@ -23,10 +23,6 @@ function createURL() {
         document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
         return
     }
-    /*if(!name){
-        document.getElementById("response").innerHTML = "Bitte gib einen Namen an"
-        return
-    }*/
 
     var params = JSON.stringify({url: shorturl, name, date})
     var xhr = new XMLHttpRequest()
