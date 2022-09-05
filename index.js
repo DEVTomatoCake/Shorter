@@ -19,9 +19,7 @@ function createURL() {
         document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
         return
     }
-    alert(date);
-
-    /*var params = JSON.stringify({url: shorturl, name, date})
+    var params = JSON.stringify({url: shorturl, name, date})
     var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function() {
         if (this.readyState == 4) document.getElementById("response").innerHTML = this.responseText
@@ -29,7 +27,7 @@ function createURL() {
     xhr.open("POST", "https://api.tomatenkuchen.eu/short", true)
     xhr.setRequestHeader("Content-Type", "application/json")
 
-    xhr.send(params)*/
+    xhr.send(params)
 }
 
 function copy() {
