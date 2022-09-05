@@ -81,3 +81,13 @@ select {
     position: relative;
     left: 154px;
 }
+
+.custom_pos_2 {
+    position: relative;
+    left: 75px;
+}
+
+.custom_pos_3 {
+    position: relative;
+    left: 13px;
+}
