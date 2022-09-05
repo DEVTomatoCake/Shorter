@@ -1,0 +1,22 @@
+* {
+    background: linear-gradient(90deg, hsla(259, 84%, 78%, 1) 0%, hsla(206, 67%, 75%, 1) 100%);
+    font-family: Helvetica, sans-serif;
+    font-size: 110%;
+}
+button, input {
+    border-radius: 5px;
+    margin: 7px 0;
+}
+
+button {
+    padding: 7px;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.cursor {
+    cursor: pointer;
+}
