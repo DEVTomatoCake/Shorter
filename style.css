@@ -96,22 +96,16 @@ button:hover {
     background: #0077ff;
     border: 3px solid #0b487e;
     box-shadow: 0 0 50px #2b38cf;
-    border-radius: 5px;
-    margin: 7px 0;
-    padding: 5px;
-    font-family: Helvetica, sans-serif;
-    font-size: 130%;
 }
 
 button:active {
     background: #2b38cf;
     border: 3px solid #0077ff;
     box-shadow: 0 0 50px #0b487e;
-    border-radius: 5px;
-    margin: 7px 0;
-    padding: 5px;
-    font-family: Helvetica, sans-serif;
-    font-size: 130%;
+}
+
+button:hover, button:active {
+    margin: 5px 0;
 }
 
 footer {
@@ -131,5 +125,4 @@ img:hover {
 .discord {
     position: relative;
     left: 20px;
-    /*filter: invert(100%);*/
 }

@@ -11,14 +11,9 @@ function createURL() {
     const shorturl = document.getElementById("url").value
     const name = document.getElementById("name").value
     const date = getDate()
-    if(!shorturl){
-        document.getElementById("response").innerHTML = "Bitte gib eine URL an"
-        return
-    }
-    if(!shorturl.startsWith("https://") && !shorturl.startsWith("http://")){
-        document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
-        return
-    }
+    if (!shorturl) return document.getElementById("response").innerHTML = "Bitte gib eine URL an"
+    if (!shorturl.startsWith("https://") && !shorturl.startsWith("http://")) return document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
+    
     var params = JSON.stringify({url: shorturl, name, date})
     var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function() {
@@ -37,11 +32,11 @@ function copy() {
     })
 }
 
-function update(){
-    let select = document.getElementById('date');
+function update() {
+    let select = document.getElementById("date");
 	let option = select.options[select.selectedIndex];
     switch (option.value) {
-        case "userdef": document.getElementById("date_userdef").type = "datetime-local"; 
+        case "custom": document.getElementById("date_userdef").type = "datetime-local"; 
             var dateElem = document.getElementById("date_userdef")
             dateElem.min = dateAdd(new Date, "minute", 2).toISOString().slice(0, -8)
             dateElem.value = dateAdd(new Date, "minute", 2).toISOString().slice(0, -8)
@@ -52,11 +47,11 @@ function update(){
 }
 
 function dateAdd(date, interval, units) {
-    if(!(date instanceof Date))
+    if (!(date instanceof Date))
       return undefined;
     var ret = new Date(date);
     var checkRollover = function() { if(ret.getDate() != date.getDate()) ret.setDate(0);};
-    switch(String(interval).toLowerCase()) {
+    switch (String(interval).toLowerCase()) {
       case 'year'   :  ret.setFullYear(ret.getFullYear() + units); checkRollover();  break;
       case 'quarter':  ret.setMonth(ret.getMonth() + 3*units); checkRollover();  break;
       case 'month'  :  ret.setMonth(ret.getMonth() + units); checkRollover();  break;
@@ -70,17 +65,17 @@ function dateAdd(date, interval, units) {
     return ret;
 }
 
-function getDate(){
-    let select = document.getElementById('date');
+function getDate() {
+    let select = document.getElementById("date");
     let option = select.options[select.selectedIndex];
     switch (option.value) {
-        case "userdef": return document.getElementById("date_userdef").value;
+        case "custom": return document.getElementById("date_userdef").value;
         default: return toDate(option.value).toISOString().slice(0, -8);
     }
 }
 
-function toDate(value){
-    let select = document.getElementById('date');
+function toDate(value) {
+    let select = document.getElementById("date");
     let option = select.options[select.selectedIndex];
     let date = new Date()
     switch (option.value) {
