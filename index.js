@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 function setup() {
     const formElem = document.getElementById("createForm")
     formElem.addEventListener("submit", e => {
@@ -13,7 +12,7 @@ function createURL() {
     const date = getDate()
     if (!shorturl) return document.getElementById("response").innerHTML = "Bitte gib eine URL an"
     if (!shorturl.startsWith("https://") && !shorturl.startsWith("http://")) return document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
-    
+
     var params = JSON.stringify({url: shorturl, name, date})
     var xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function() {
