@@ -2,9 +2,9 @@
 
 + Replace all hardcoded pixels with better (and working lol) flexbox
 + Apply cleaner CSS Rules
-+ Add Footer:
-  + GitHub Link
-  + Discord Link
++ ~~Add Footer~~:
+  + ~~GitHub Link~~
+  + ~~Discord Link~~
 + Buttons:
   + ~~Button Hover Effects~~
   + ~~Button Click Effects~~

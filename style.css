@@ -103,7 +103,6 @@ button:hover {
     font-size: 130%;
 }
 
-/*add nice button click effect*/
 button:active {
     background: #2b38cf;
     border: 3px solid #0077ff;
@@ -113,4 +112,24 @@ button:active {
     padding: 5px;
     font-family: Helvetica, sans-serif;
     font-size: 130%;
+}
+
+footer {
+    position: relative;
+    top: 80px;
+    text-align: center;
+    color: #fff;
+    font-family: Helvetica, sans-serif;
+    margin: 10px;
+}
+
+img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 50px #2b38cf;
+}
+
+.discord {
+    position: relative;
+    left: 20px;
+    /*filter: invert(100%);*/
 }
