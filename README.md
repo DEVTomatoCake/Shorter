@@ -1,12 +1,13 @@
-**TODO**
+# TODO
+
 + Replace all hardcoded pixels with better (and working lol) flexbox
 + Apply cleaner CSS Rules
 + Add Footer:
   + GitHub Link
   + Discord Link
 + Buttons:
-  + Button Hover Effects
-  + Button Click Effects
+  + ~~Button Hover Effects~~
+  + ~~Button Click Effects~~
 + Language:
   + Make Back- and Frontend the same language
   + Add Option to switch between languages
