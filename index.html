@@ -6,69 +6,54 @@
 		<link href="https://tomatenkuchen.eu/assets/images/icon.ico" rel="shortcut icon" type="image/x-icon" />
 		<link href="https://tomatenkuchen.eu/assets/images/icon.ico" rel="icon" type="image/x-icon" />
 		<meta name="description" content="Short-URL erstellen" />
-
-		<style>
-			* {
-				font-family: Helvetica, sans-serif;
-				font-size: 105%;
-				background: #ECECEC;
-			}
-			button, input {
-				border-radius: 5px;
-				margin: 7px 0;
-			}
-			button {
-				padding: 7px;
-			}
-		</style>
-		<script>
-			function setup() {
-				var dateElem = document.getElementById("date")
-				dateElem.min = new Date().toISOString().slice(0, -8)
-				dateElem.value = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, -8)
-
-				const formElem = document.getElementById("createForm")
-				formElem.addEventListener("submit", e => {
-					e.preventDefault()
-					createURL()
-				})
-			}
-
-			function createURL() {
-				const shorturl = document.getElementById("url").value
-				const name = document.getElementById("name").value
-				const date = document.getElementById("date").value
-
-				var params = JSON.stringify({url: shorturl, name, date})
-				var xhr = new XMLHttpRequest()
-				xhr.onreadystatechange = function() {
-					if (this.readyState == 4) document.getElementById("response").innerHTML = this.responseText
-				}
-				xhr.open("POST", "https://api.tomatenkuchen.eu/short", true)
-				xhr.setRequestHeader("Content-Type", "application/json")
-
-				xhr.send(params)
-			}
-
-			function copy() {
-			  	navigator.clipboard.writeText(document.getElementById("resulturl").href).catch(err => {
-					alert("Link konnte nicht kopiert werden")
-					console.error("Link konnte nicht kopiert werden", err)
-				})
-			}
-		</script>
+		<script src="index.js" defer></script>
+		<link rel="stylesheet" href="style.css"/>
 	</head>
 	<body onload="setup()">
-		<h1 id="response"></h1>
-		<br>
-		<form autocomplete="off" id="createForm">
-			<input id="url" type="url" name="shorturl" placeholder="Ziel-URL angeben" required>
+		<main class="container">
+			<h1>Short-URL erstellen</h1>
 			<br>
-			<input id="name" type="text" name="shortname" placeholder="Short-Name angeben">
+			<form autocomplete="off" id="createForm">
+				<label for="url">URL<span>*</span>:</label>
+				<input id="url" type="text" name="shorturl" class="custom_pos_2">
+				<br>
+				<label for="name">Short-Name:</label>
+				<input id="name" type="text" name="shortname" class="custom_pos_3">
+				<br>
+				<label for="date">Ablaufdatum<span>*</span>:</label>
+				<select name="shortdate_predef" id="date" required onchange="update()">
+					<option value="15m">15 Minuten</option>
+					<option value="1h">1 Stunde</option>
+					<option value="8h">8 Stunden</option>
+					<option value="1d" selected>1 Tag</option>
+					<option value="3d">3 Tage</option>
+					<option value="1w">1 Woche</option>
+					<option value="2w">2 Wochen</option>
+					<option value="1mo">1 Monat</option>
+					<option value="2mo">2 Monate</option>
+					<option value="3mo">3 Monate</option>
+					<option value="6mo">6 Monate</option>
+					<option value="1y">1 Jahr</option>
+					<option value="custom">Benutzerdefiniert</option>
+				</select>
+				<br>
+				<input id="date_userdef" name="shortdate" type="hidden" class="custom_pos_1">
+				<br>
+				<button type="submit" class="submit">Erstellen</button>
+			</form>
 			<br>
-			<input id="date" type="datetime-local" name="shortdate" required>
-			<br>
-			<button type="submit">Erstellen</button>
-		</form>
+			<fieldset>
+				<legend>Status:</legend>
+				<h3 id="response">Warte auf Eingabe...</h3>
+			</fieldset>
+		</main>
+		<footer>
+			<a href="https://github.com/DEVTomatoCake/Shorter">
+				<img src="./assets/gh.png" alt="GitHub" width="32" height="32">
+			</a>
+			<a href="https://discord.gg/ZqzFUC8qe9">
+				<img src="./assets/dc.png" alt="Discord" width="40" height="32" class="discord">
+			</a>
+		</footer>
 	</body>
 </html>
