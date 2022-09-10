@@ -126,3 +126,9 @@ img:hover {
     position: relative;
     left: 20px;
 }
+
+#langswitch {
+    position: relative;
+    left: calc(50% - 50px);
+    font-size: 90%;
+}
