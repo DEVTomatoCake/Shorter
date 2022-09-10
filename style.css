@@ -110,8 +110,7 @@ footer {
     font-family: Helvetica, sans-serif;
     margin: 10px;
 }
-
-img:hover {
+footer img:hover {
     transform: scale(1.1);
     transition: .2s;
     box-shadow: 0 0 50px #2b38cf;

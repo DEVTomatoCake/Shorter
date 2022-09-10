@@ -16,7 +16,7 @@
 			<br>
 			<form autocomplete="off" id="createForm">
 				<label for="url">URL<span>*</span>:</label>
-				<input id="url" type="url" name="shorturl" class="custom_pos_2">
+				<input id="url" type="url" name="shorturl" required class="custom_pos_2">
 				<br>
 				<label for="name" id="lang2">Short-Name:</label>
 				<input id="name" type="text" name="shortname" class="custom_pos_3">
@@ -30,12 +30,12 @@
 					<option value="3d">3 Tage</option>
 					<option value="1w">1 Woche</option>
 					<option value="2w">2 Wochen</option>
-					<option value="1mo" >1 Monat</option>
-					<option value="2mo" >2 Monate</option>
-					<option value="3mo" >3 Monate</option>
-					<option value="6mo" >6 Monate</option>
-					<option value="1y" >1 Jahr</option>
-					<option value="custom" >Benutzerdefiniert</option>
+					<option value="1mo">1 Monat</option>
+					<option value="2mo">2 Monate</option>
+					<option value="3mo">3 Monate</option>
+					<option value="6mo">6 Monate</option>
+					<option value="1y">1 Jahr</option>
+					<option value="custom">Benutzerdefiniert</option>
 				</select>
 				<br>
 				<input id="date_userdef" name="shortdate" type="hidden" class="custom_pos_1">
@@ -46,6 +46,7 @@
 			<fieldset>
 				<legend>Status:</legend>
 				<h3 id="response">Warte auf Eingabe...</h3>
+				<img id="qrimage" style="display: none;" />
 			</fieldset>
 		</main>
 		<footer>
