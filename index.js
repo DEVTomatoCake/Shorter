@@ -2,10 +2,8 @@ function setup() {
     const formElem = document.getElementById("createForm")
 
     let lang = Intl.DateTimeFormat().resolvedOptions().locale;
-    sessionStorage.setItem("lang", lang.match(/de/));
-    if (lang == "en") {
-        changelang("en");
-    }
+    sessionStorage.setItem("lang", "de");
+    if (lang == lang.match(/en/)) changeLang();
 
     formElem.addEventListener("submit", e => {
         e.preventDefault()
@@ -18,17 +16,12 @@ async function createURL() {
     const name = document.getElementById("name").value
     const date = getDate()
     if (!shorturl) {
-        if (sessionStorage.getItem("lang") == "de") {
-            return document.getElementById("response").innerHTML = "Bitte gib eine URL an"
-        } else {
-        return document.getElementById("response").innerHTML = "Please enter a URL"
-        }
+        if (sessionStorage.getItem("lang") == "de") return document.getElementById("response").innerHTML = "Bitte gib eine URL an"
+        else return document.getElementById("response").innerHTML = "Please enter a URL"
     }
     if (!shorturl.startsWith("https://") && !shorturl.startsWith("http://")) {
-        if (sessionStorage.getItem("lang") == "de") {
-            return document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
-        }
-        return document.getElementById("response").innerHTML = "Please enter a valid URL"
+        if (sessionStorage.getItem("lang") == "de") return document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an";
+        else return document.getElementById("response").innerHTML = "Please enter a valid URL"
     }
 
     await fetch("https://api.tomatenkuchen.eu/short", {
@@ -40,64 +33,48 @@ async function createURL() {
     })
     .then(res => res.json())
     .then(data => {
-        if (data.error) {
-            throw Error(data.status);
-        }
-        switch(data.status){
-            case "missingurlbody": if(sessionStorage.getItem("lang") == "de") {
-                document.getElementById("response").innerHTML = "Bitte gib eine URL an"
-            } else {
-                document.getElementById("response").innerHTML = "Please enter a URL"
-            }
-            break;
-            case "url_missinghttps" || "url_missingdot": if(sessionStorage.getItem("lang") == "de") {
-                document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
-            } else {
-                document.getElementById("response").innerHTML = "Please enter a valid URL"
-            }
-            break;
-            case "url_cannotcheck": if(sessionStorage.getItem("lang") == "de") {
-                document.getElementById("response").innerHTML = "Die URL konnte nicht überprüft werden"
-            } else {
-                document.getElementById("response").innerHTML = "The URL could not be checked"
-            }
-            break;
-            case "url_blacklisted": if(sessionStorage.getItem("lang") == "de") {
-                document.getElementById("response").innerHTML = "Die URL ist auf der Blacklist"
-            } else {
-                document.getElementById("response").innerHTML = "The URL is on the blacklist"
-            }
-            break;
-            case "name_alreadyexists": if(sessionStorage.getItem("lang") == "de") {
-                document.getElementById("response").innerHTML = "Der Name ist bereits vergeben"
-            } else {
-                document.getElementById("response").innerHTML = "The name is already taken"
-            }
-            break;
-            case "success": if(sessionStorage.getItem("lang") == "de") {
-                document.getElementById("response").innerHTML = `Dein Link wurde erfolgreich unter <a href="https://shorter.cf/${data.name}" 
-                id="resulturl">https://shorter.cf/${data.name}</a> erstellt <button onclick="copy()">Kopieren</button>`
-            } else {
-                document.getElementById("response").innerHTML = `Your link was successfully created at <a href="https://shorter.cf/${data.name}" 
-                id="resulturl">https://shorter.cf/${data.name}</a> <button onclick="copy()">Copy</button>`
-            }
-            break;
-            default: if(sessionStorage.getItem("lang") == "de") {
-                document.getElementById("response").innerHTML = "Ein unbekannter Fehler ist aufgetreten"
-            } else {
-                document.getElementById("response").innerHTML = "An unknown error occurred"
-            }
+        if (data.error) throw Error(data.status);
+        switch(data.status) {
+            case "missingurlbody": 
+                if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine URL an";
+                else document.getElementById("response").innerHTML = "Please enter a URL";
+                break;
+            case "url_missinghttps" || "url_missingdot": 
+                if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an";
+                else document.getElementById("response").innerHTML = "Please enter a valid URL";
+                break;
+            case "url_cannotcheck": 
+                if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Die URL konnte nicht überprüft werden";
+                else document.getElementById("response").innerHTML = "The URL could not be checked";
+                break;
+            case "url_blacklisted": 
+                if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Die URL ist auf der Blacklist";
+                else document.getElementById("response").innerHTML = "The URL is on the blacklist";
+                break;
+            case "name_alreadyexists": 
+                if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Der Name ist bereits vergeben";
+                else document.getElementById("response").innerHTML = "The name is already taken";
+                break;
+            case "success": 
+                if(sessionStorage.getItem("lang") == "de") {
+                    document.getElementById("response").innerHTML = `Dein Link wurde erfolgreich unter <a href="https://shorter.cf/${data.name}" 
+                    id="resulturl">https://shorter.cf/${data.name}</a> erstellt <button onclick="copy()">Kopieren</button>`
+                } else {
+                    document.getElementById("response").innerHTML = `Your link was successfully created at <a href="https://shorter.cf/${data.name}" 
+                    id="resulturl">https://shorter.cf/${data.name}</a> <button onclick="copy()">Copy</button>`
+                }
+                break;
+            default: 
+            if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Ein unbekannter Fehler ist aufgetreten";
+            else document.getElementById("response").innerHTML = "An unknown error occurred";
         }
     });
 }
 
 function copy() {
       navigator.clipboard.writeText(document.getElementById("resulturl").href).catch(err => {
-        if (sessionStorage.getItem("lang") == "de") {
-            alert("Link konnte nicht kopiert werden")
-        } else {
-            alert("Link could not be copied")
-        }
+        if (sessionStorage.getItem("lang") == "de") alert("Link konnte nicht kopiert werden")
+        else alert("Link could not be copied")
         console.error("Link could not be copied", err)
     })
 }
@@ -117,8 +94,7 @@ function update() {
 }
 
 function dateAdd(date, interval, units) {
-    if (!(date instanceof Date))
-      return undefined;
+    if (!(date instanceof Date)) return undefined;
     var ret = new Date(date);
     var checkRollover = function() { if(ret.getDate() != date.getDate()) ret.setDate(0);};
     switch (String(interval).toLowerCase()) {
@@ -163,51 +139,78 @@ function toDate(value) {
     }
 }
 
-function switchLang(tolang) {
-    if (tolang == "en") {
-        document.getElementsByTagName("h1")[0].innerHTML = "Create a short URL"
-        document.getElementById("lang1").innerHTML = "Short-name:";
-        document.getElementById("lang2").innerHTML = "Expiry date<span>*</span>";
-        document.getElementsByClassName("submit")[0].innerHTML = "Create";
-        document.getElementById("response").innerHTML = "Waiting for input";
-        document.getElementById("lang3").innerHTML = "15 minutes";
-        document.getElementById("lang4").innerHTML = "1 hour";
-        document.getElementById("lang5").innerHTML = "8 hours";
-        document.getElementById("lang6").innerHTML = "1 day";
-        document.getElementById("lang7").innerHTML = "3 days";
-        document.getElementById("lang8").innerHTML = "1 week";
-        document.getElementById("lang9").innerHTML = "2 weeks";
-        document.getElementById("lang10").innerHTML = "1 month";
-        document.getElementById("lang11").innerHTML = "2 months";
-        document.getElementById("lang12").innerHTML = "3 months";
-        document.getElementById("lang13").innerHTML = "6 months";
-        document.getElementById("lang14").innerHTML = "1 year";
-        document.getElementById("lang15").innerHTML = "custom";
-        document.getElementById("langswitch").innerHTML = "Deutsch";
-        document.getElementById("langswitch").setAttribute("onclick", "switchLang('de')")
-        sessionStorage.setItem("lang", "en")
+const langde = {
+    "optionsVal": {
+        "15m": "15 Minuten",
+        "1h": "1 Stunde",
+        "8h": "8 Stunden",
+        "1d": "1 Tag",
+        "3d": "3 Tage",
+        "1w": "1 Woche",
+        "2w": "2 Wochen",
+        "1mo": "1 Monat",
+        "2mo": "2 Monate",
+        "3mo": "3 Monate",
+        "6mo": "6 Monate",
+        "1y": "1 Jahr",
+        "custom": "Benutzerdefiniert",
+    },
+    "response": "Warte auf Eingabe...",
+    "lang1": "Short-URL erstellen",
+    "lang2": "Short-Name:",
+    "lang3": "Ablaufdatum<span>*</span>",
+    "submit": "Erstellen",
+    "langswitch": "English"
+}
+
+const langen = {
+    "optionsVal": {
+        "15m": "15 Minutes",
+        "1h": "1 Hour",
+        "8h": "8 Hours",
+        "1d": "1 Day",
+        "3d": "3 Days",
+        "1w": "1 Week",
+        "2w": "2 Weeks",
+        "1mo": "1 Month",
+        "2 mo": "2 Months",
+        "3mo": "3 Months",
+        "6mo": "6 Months",
+        "1y": "1 Year",
+        "custom": "Custom",
+    },
+    "response": "Waiting for input...",
+    "lang1": "Create short-URL",
+    "lang2": "Short-name:",
+    "lang3": "Expiration date<span>*</span>",
+    "submit": "Create",
+    "langswitch": "Deutsch"
+}
+
+function getLang() {
+    if(sessionStorage.getItem("lang") == "de") return langde
+    else return langen
+}
+
+function setLang() {
+    let lang = getLang()
+    for (const [key, value] of Object.entries(lang["optionsVal"])) {
+        let options = document.getElementById("date").options;
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value == key) options[i].text = value;
+        }
     }
-    else {
-        document.getElementsByTagName("h1")[0].innerHTML = "Short-URL erstellen"
-        document.getElementById("lang1").innerHTML = "Short-Name:";
-        document.getElementById("lang2").innerHTML = "Ablaufdatum:<span>*</span>";
-        document.getElementsByClassName("submit")[0].innerHTML = "Erstellen";
-        document.getElementById("response").innerHTML = "Warte auf Eingabe";
-        document.getElementById("lang3").innerHTML = "15 Minuten";
-        document.getElementById("lang4").innerHTML = "1 Stunde";
-        document.getElementById("lang5").innerHTML = "8 Stunden";
-        document.getElementById("lang6").innerHTML = "1 Tag";
-        document.getElementById("lang7").innerHTML = "3 Tage";
-        document.getElementById("lang8").innerHTML = "1 Woche";
-        document.getElementById("lang9").innerHTML = "2 Wochen";
-        document.getElementById("lang10").innerHTML = "1 Monat";
-        document.getElementById("lang11").innerHTML = "2 Monate";
-        document.getElementById("lang12").innerHTML = "3 Monate";
-        document.getElementById("lang13").innerHTML = "6 Monate";
-        document.getElementById("lang14").innerHTML = "1 Jahr";
-        document.getElementById("lang15").innerHTML = "Benutzerdefiniert";
-        document.getElementById("langswitch").innerHTML = "English";
-        document.getElementById("langswitch").setAttribute("onclick", "switchLang('en')")
-        sessionStorage.setItem("lang", "de")
-    }
+    document.getElementById("response").innerHTML = lang["response"]
+    document.getElementById("lang1").innerHTML = lang["lang1"]
+    document.getElementById("lang2").innerHTML = lang["lang2"]
+    document.getElementById("lang3").innerHTML = lang["lang3"]
+    document.getElementById("submit").innerHTML = lang["submit"]
+    document.getElementById("langswitch").innerHTML = lang["langswitch"]
+}
+
+function changeLang() {
+    if(sessionStorage.getItem("lang") == "de") sessionStorage.setItem("lang", "en")
+    else sessionStorage.setItem("lang", "de")
+    setLang()
+    update()
 }
