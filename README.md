@@ -3,14 +3,10 @@
 ## TODO
 
 - [ ] Replace all hardcoded pixels with better (and working lol) flexbox
-  - [ ] Fix input boxes in english
 - [ ] Apply cleaner CSS Rules
-- [x] Add github and discord footer
-- [x] Button hover and click effects
-- [x] Language:
-  - [x] Make Back- and Frontend the same language
-  - [x] Add Option to switch between languages
-- [ ] ~~Add option to change to whitemode *no im joking would never do that lol. Apart from this is the site light enough*~~
-- [ ] ~~Fix site in combination of DarkReader~~
-- [ ] Both above could be fixed by using a really light gray color as background
+- [ ] Change background color theme of the site (like a really light gray), to add whitemode/darkreader support
 - [ ] Make the site look better on mobile
+- [x] Button hover and click effects
+- [x] Multi language:
+  - [x] Make back- and frontend be the same language
+  - [x] Add option to switch between languages
