@@ -11,6 +11,6 @@
   - [x] Make Back- and Frontend the same language
   - [x] Add Option to switch between languages
 - [ ] ~~Add option to change to whitemode *no im joking would never do that lol. Apart from this is the site light enough*~~
-- [ ] ~~Fix site in combination of DarkReader hmmmmmm~~
+- [ ] ~~Fix site in combination of DarkReader~~
 - [ ] Both above could be fixed by using a really light gray color as background
 - [ ] Make the site look better on mobile
