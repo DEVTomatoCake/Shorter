@@ -1,9 +1,9 @@
 function setup() {
     const formElem = document.getElementById("createForm")
 
-    let lang = Intl.DateTimeFormat().resolvedOptions().locale
+    const userLang = navigator.language || navigator.userLanguage
     sessionStorage.setItem("lang", "de")
-    if (lang.startsWith("en")) changeLang()
+    if (userLang ? (userLang.split("-")[0] == "de" ? "de" : "en") : "en" == "en") changeLang()
 
     formElem.addEventListener("submit", e => {
         e.preventDefault()
@@ -24,12 +24,12 @@ async function createURL() {
         else return document.getElementById("response").innerHTML = "Please enter a valid URL"
     }
 
-    await fetch("https://api.tomatenkuchen.eu/short", {
-        method: "POST",
+    fetch("https://api.tomatenkuchen.eu/short", {
+        method: "post",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({url: shorturl, name: name, date: date})
+        body: JSON.stringify({url: shorturl, name, date})
     })
     .then(res => res.json())
     .then(data => {
@@ -70,7 +70,7 @@ async function createURL() {
 }
 
 function copy() {
-      navigator.clipboard.writeText(document.getElementById("resulturl").href).catch(err => {
+    navigator.clipboard.writeText(document.getElementById("resulturl").href).catch(err => {
         if (sessionStorage.getItem("lang") == "de") alert("Link konnte nicht kopiert werden")
         else alert("Link could not be copied")
         console.error("Link could not be copied", err)
@@ -94,21 +94,21 @@ function update() {
 }
 
 function dateAdd(date, interval, units) {
-    if (!(date instanceof Date)) return undefined;
-    var ret = new Date(date);
-    var checkRollover = function() { if(ret.getDate() != date.getDate()) ret.setDate(0);};
+    if (!(date instanceof Date)) return undefined
+    var ret = new Date(date)
+    var checkRollover = () => { if(ret.getDate() != date.getDate()) ret.setDate(0);}
     switch (String(interval).toLowerCase()) {
-        case 'year'   : ret.setFullYear(ret.getFullYear() + units); checkRollover();  break;
-        case 'quarter': ret.setMonth(ret.getMonth() + 3 * units); checkRollover();  break;
-        case 'month'  : ret.setMonth(ret.getMonth() + units); checkRollover();  break;
-        case 'week'   : ret.setDate(ret.getDate() + 7 * units);  break;
-        case 'day'    : ret.setDate(ret.getDate() + units);  break;
-        case 'hour'   : ret.setTime(ret.getTime() + units * 3600000);  break;
-        case 'minute' : ret.setTime(ret.getTime() + units * 60000);  break;
-        case 'second' : ret.setTime(ret.getTime() + units * 1000);  break;
+        case 'year'   : ret.setFullYear(ret.getFullYear() + units); checkRollover(); break;
+        case 'quarter': ret.setMonth(ret.getMonth() + 3 * units); checkRollover(); break;
+        case 'month'  : ret.setMonth(ret.getMonth() + units); checkRollover(); break;
+        case 'week'   : ret.setDate(ret.getDate() + 7 * units); break;
+        case 'day'    : ret.setDate(ret.getDate() + units); break;
+        case 'hour'   : ret.setTime(ret.getTime() + units * 3600000); break;
+        case 'minute' : ret.setTime(ret.getTime() + units * 60000); break;
+        case 'second' : ret.setTime(ret.getTime() + units * 1000); break;
         default       : ret = undefined;  break;
     }
-    return ret;
+    return ret
 }
 
 function getDate() {
@@ -151,12 +151,12 @@ const langde = {
         "3mo": "3 Monate",
         "6mo": "6 Monate",
         "1y": "1 Jahr",
-        "custom": "Benutzerdefiniert",
+        "custom": "Benutzerdefiniert"
     },
     "response": "Warte auf Eingabe...",
     "lang1": "Short-URL erstellen",
     "lang2": "Short-Name:",
-    "lang3": "Ablaufdatum<span>*</span>",
+    "lang3": "Ablaufdatum<span>*</span>:",
     "submit": "Erstellen",
     "langswitch": "English"
 }
@@ -170,16 +170,16 @@ const langen = {
         "1w": "1 Week",
         "2w": "2 Weeks",
         "1mo": "1 Month",
-        "2 mo": "2 Months",
+        "2mo": "2 Months",
         "3mo": "3 Months",
         "6mo": "6 Months",
         "1y": "1 Year",
-        "custom": "Custom",
+        "custom": "Custom"
     },
     "response": "Waiting for input...",
-    "lang1": "Create short-URL",
+    "lang1": "Create a short URL",
     "lang2": "Short name:",
-    "lang3": "Expiration date<span>*</span>",
+    "lang3": "Expiration date<span>*</span>:",
     "submit": "Create",
     "langswitch": "Deutsch"
 }
@@ -203,6 +203,7 @@ function setLang() {
     document.getElementById("lang3").innerHTML = lang["lang3"]
     document.getElementById("submit").innerHTML = lang["submit"]
     document.getElementById("langswitch").innerHTML = lang["langswitch"]
+    document.getElementsByTagName("title")[0].innerText = lang["lang1"]
 }
 
 function changeLang() {

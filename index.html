@@ -11,42 +11,42 @@
 		<link rel="stylesheet" href="./assets/style.css"/>
 	</head>
 	<body onload="setup()">
-		<main class="container">
+		<main>
 			<button id="langswitch" onclick="changeLang()">English</button>
 			<h1 id="lang1">Short-URL erstellen</h1>
 			<br>
 			<form autocomplete="off" id="createForm">
-				<label for="url">URL<span>*</span>:</label>
-				<input id="url" type="url" name="shorturl" required class="custom_pos_2">
-				<br>
-				<label for="name" id="lang2">Short-Name:</label>
-				<input id="name" type="text" name="shortname" class="custom_pos_3">
-				<br>
-				<label for="date" id="lang3" >Ablaufdatum<span>*</span>:</label>
-				<select name="shortdate_predef" id="date" required onchange="update()">
-					<option value="15m">15 Minuten</option>
-					<option value="1h">1 Stunde</option>
-					<option value="8h">8 Stunden</option>
-					<option value="1d" selected>1 Tag</option>
-					<option value="3d">3 Tage</option>
-					<option value="1w">1 Woche</option>
-					<option value="2w">2 Wochen</option>
-					<option value="1mo">1 Monat</option>
-					<option value="2mo">2 Monate</option>
-					<option value="3mo">3 Monate</option>
-					<option value="6mo">6 Monate</option>
-					<option value="1y">1 Jahr</option>
-					<option value="custom">Benutzerdefiniert</option>
-				</select>
-				<br>
-				<input id="date_userdef" name="shortdate" type="hidden" class="custom_pos_1">
-				<br>
-				<button type="submit" class="submit" id="submit">Erstellen</button>
+				<div id="contentgrid">
+					<label for="url">URL<span>*</span>:</label>
+					<input id="url" type="url" name="shorturl" required>
+					<label for="name" id="lang2">Short-Name:</label>
+					<input id="name" type="text" name="shortname">
+					<label for="date" id="lang3" >Ablaufdatum<span>*</span>:</label>
+					<div>
+						<select name="shortdate_predef" id="date" required onchange="update()">
+							<option value="15m">15 Minuten</option>
+							<option value="1h">1 Stunde</option>
+							<option value="8h">8 Stunden</option>
+							<option value="1d">1 Tag</option>
+							<option value="3d" selected>3 Tage</option>
+							<option value="1w">1 Woche</option>
+							<option value="2w">2 Wochen</option>
+							<option value="1mo">1 Monat</option>
+							<option value="2mo">2 Monate</option>
+							<option value="3mo">3 Monate</option>
+							<option value="6mo">6 Monate</option>
+							<option value="1y">1 Jahr</option>
+							<option value="custom">Benutzerdefiniert</option>
+						</select>
+						<input id="date_userdef" name="shortdate" type="hidden">
+					</div>
+				</div>
+				<center><button type="submit" id="submit">Erstellen</button></center>
 			</form>
 			<br>
 			<fieldset>
 				<legend>Status:</legend>
-				<h3 id="response">Warte auf Eingabe...</h3>
+				<p id="response">Warte auf Eingabe...</p>
 				<img id="qrimage" style="display: none;" />
 			</fieldset>
 		</main>
@@ -55,7 +55,7 @@
 				<img src="./assets/github.png" alt="GitHub" width="32" height="32">
 			</a>
 			<a href="https://discord.gg/ZqzFUC8qe9">
-				<img src="./assets/discord.png" alt="Discord" width="40" height="30" class="discord">
+				<img src="./assets/discord.png" alt="Discord" width="40" height="30">
 			</a>
 		</footer>
 	</body>
