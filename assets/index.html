@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 	<head>
-		<title>Short-URL erstellen</title>
+		<title>Create a short URL</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Short-URL erstellen" />
+		<meta name="description" content="Create a short URL within seconds" />
+		<meta name="theme-color" content="#e4b400">
+		<meta property="og:type" name="og:type" content="shorter" />
+		<meta property="og:image" content="https://shorter.cf/screen.png" />
+		<meta data-react-helmet="true" property="twitter:image" name="twitter:image" content="https://shorter.cf/screen.png" />
+		<meta data-react-helmet="true" property="og:image" name="og:image" content="https://shorter.cf/screen.png" />
 
-		<link href="./assets/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-		<link href="./assets/favicon.ico" rel="icon" type="image/x-icon" />
-		<script src="./assets/index.js" defer></script>
-		<link rel="stylesheet" href="./assets/style.css"/>
+		<link href="./favicon.ico" rel="shortcut icon" type="image/x-icon" />
+		<link href="./favicon.ico" rel="icon" type="image/x-icon" />
+		<script src="./index.js" defer></script>
+		<link rel="stylesheet" href="./style.css"/>
 	</head>
 	<body onload="setup()">
 		<main>
@@ -21,7 +26,7 @@
 					<input id="url" type="url" name="shorturl" required>
 					<label for="name" id="lang2">Short-Name:</label>
 					<input id="name" type="text" name="shortname">
-					<label for="date" id="lang3" >Ablaufdatum<span>*</span>:</label>
+					<label for="date" id="lang3">Ablaufdatum<span>*</span>:</label>
 					<div>
 						<select name="shortdate_predef" id="date" required onchange="update()">
 							<option value="15m">15 Minuten</option>
@@ -52,10 +57,10 @@
 		</main>
 		<footer>
 			<a href="https://github.com/DEVTomatoCake/Shorter">
-				<img src="./assets/github.png" alt="GitHub" width="32" height="32">
+				<img src="./github.png" alt="GitHub" width="32" height="32">
 			</a>
 			<a href="https://discord.gg/ZqzFUC8qe9">
-				<img src="./assets/discord.png" alt="Discord" width="40" height="30">
+				<img src="./discord.png" alt="Discord" width="40" height="30">
 			</a>
 		</footer>
 	</body>
