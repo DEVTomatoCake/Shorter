@@ -4,8 +4,7 @@
   "private": true,
   "author": "TomatoCake, BLACK",
   "scripts": {
-    "deploy": "wrangler deploy",
-    "start": "wrangler dev"
+    "lint": "eslint . --ext .html,.js --report-unused-disable-directives"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.0"
