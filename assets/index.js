@@ -3,7 +3,7 @@ function setup() {
 
 	const userLang = navigator.language || navigator.userLanguage
 	sessionStorage.setItem("lang", "de")
-	if (userLang ? (userLang.split("-")[0] == "de" ? "de" : "en") : "en" == "en") changeLang()
+	if (userLang && userLang.split("-")[0] != "de") changeLang()
 
 	formElem.addEventListener("submit", e => {
 		e.preventDefault()
@@ -16,12 +16,12 @@ async function createURL() {
 	const name = document.getElementById("name").value
 	const date = getDate()
 	if (!shorturl) {
-		if (sessionStorage.getItem("lang") == "de") return document.getElementById("response").innerHTML = "Bitte gib eine URL an"
-		else return document.getElementById("response").innerHTML = "Please enter a URL"
+		if (sessionStorage.getItem("lang") == "de") return document.getElementById("response").innerHTML = "Bitte gib eine URL an!"
+		else return document.getElementById("response").innerHTML = "Please enter a URL!"
 	}
 	if (!shorturl.startsWith("https://") && !shorturl.startsWith("http://")) {
-		if (sessionStorage.getItem("lang") == "de") return document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
-		else return document.getElementById("response").innerHTML = "Please enter a valid URL"
+		if (sessionStorage.getItem("lang") == "de") return document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an!"
+		else return document.getElementById("response").innerHTML = "Please enter a valid URL!"
 	}
 
 	fetch(location.href, {
@@ -35,22 +35,24 @@ async function createURL() {
 	.then(data => {
 		console.log("Response received", data)
 		if (data.name) {
-			if (sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = 'Der Link wurde erfolgreich unter <a href="https://shorter.cf/' + data.name + '" id="resulturl">https://shorter.cf/' + data.name + '</a> erstellt <button onclick="copy()">Kopieren</button>'
-			else document.getElementById("response").innerHTML = 'The link was successfully created at <a href="https://shorter.cf/' + data.name + '" id="resulturl">https://shorter.cf/' + data.name + '</a> <button onclick="copy()">Copy</button>'
+			if (sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML =
+				"Der Link wurde erfolgreich unter <a href='https://shorter.cf/" + data.name + "' id='resulturl'>https://shorter.cf/" + data.name + "</a> erstellt <button onclick='copy()'>Kopieren</button>"
+			else document.getElementById("response").innerHTML =
+				"The link was successfully created at <a href='https://shorter.cf/" + data.name + "' id='resulturl'>https://shorter.cf/" + data.name + "</a> <button onclick='copy()'>Copy</button>"
 			document.getElementById("qrimage").src = "https://api.qrserver.com/v1/create-qr-code/?data=https%3A%2F%2Fshorter.cf%2F" + encodeURIComponent(data.name) + "&size=150x150&qzone=2"
 			document.getElementById("qrimage").style.display = "block"
 		} else {
 			switch (data.error) {
 				case "missingurlbody":
-					if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine URL an"
+					if (sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine URL an"
 					else document.getElementById("response").innerHTML = "Please enter a URL"
 					break
 				case "url_invalid":
-					if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
+					if (sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
 					else document.getElementById("response").innerHTML = "Please enter a valid URL"
 					break
 				case "name_alreadyexists":
-					if(sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Der Name ist bereits vergeben"
+					if (sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Der Name ist bereits vergeben"
 					else document.getElementById("response").innerHTML = "The name is already taken"
 					break
 				default:
@@ -75,9 +77,9 @@ function update() {
 	switch (option.value) {
 		case "custom":
 			document.getElementById("date_userdef").type = "datetime-local"
-			var dateElem = document.getElementById("date_userdef")
-			dateElem.min = dateAdd(new Date, "minute", 2).toISOString().slice(0, -8)
-			dateElem.value = dateAdd(new Date, "minute", 2).toISOString().slice(0, -8)
+			const dateElem = document.getElementById("date_userdef")
+			dateElem.min = dateAdd(new Date(), "minute", 2).toISOString().slice(0, -8)
+			dateElem.value = dateAdd(new Date(), "minute", 2).toISOString().slice(0, -8)
 			break
 		default:
 			document.getElementById("date_userdef").type = "hidden"
@@ -86,19 +88,42 @@ function update() {
 }
 
 function dateAdd(date, interval, units) {
-	if (!(date instanceof Date)) return undefined
-	var ret = new Date(date)
-	var checkRollover = () => { if(ret.getDate() != date.getDate()) ret.setDate(0);}
+	if (!(date instanceof Date)) return void 0
+	let ret = new Date(date)
+	const checkRollover = () => {
+		if (ret.getDate() != date.getDate()) ret.setDate(0)
+	}
+
 	switch (String(interval).toLowerCase()) {
-		case 'year'   : ret.setFullYear(ret.getFullYear() + units); checkRollover(); break;
-		case 'quarter': ret.setMonth(ret.getMonth() + 3 * units); checkRollover(); break;
-		case 'month'  : ret.setMonth(ret.getMonth() + units); checkRollover(); break;
-		case 'week'   : ret.setDate(ret.getDate() + 7 * units); break;
-		case 'day'    : ret.setDate(ret.getDate() + units); break;
-		case 'hour'   : ret.setTime(ret.getTime() + units * 3600000); break;
-		case 'minute' : ret.setTime(ret.getTime() + units * 60000); break;
-		case 'second' : ret.setTime(ret.getTime() + units * 1000); break;
-		default       : ret = undefined;  break;
+		case "year":
+			ret.setFullYear(ret.getFullYear() + units)
+			checkRollover()
+			break
+		case "quarter":
+			ret.setMonth(ret.getMonth() + 3 * units)
+			checkRollover()
+			break
+		case "month":
+			ret.setMonth(ret.getMonth() + units)
+			checkRollover()
+			break
+		case "week":
+			ret.setDate(ret.getDate() + 7 * units)
+			break
+		case "day":
+			ret.setDate(ret.getDate() + units)
+			break
+		case "hour":
+			ret.setTime(ret.getTime() + units * 3600000)
+			break
+		case "minute":
+			ret.setTime(ret.getTime() + units * 60000)
+			break
+		case "second":
+			ret.setTime(ret.getTime() + units * 1000)
+			break
+		default:
+			ret = null
 	}
 	return ret
 }
@@ -108,7 +133,7 @@ function getDate() {
 	let option = select.options[select.selectedIndex]
 
 	if (option.value == "custom") return document.getElementById("date_userdef").value
-	else return toDate(option.value).toISOString().slice(0, -8)
+	return toDate().toISOString().slice(0, -8)
 }
 
 function toDate() {
@@ -183,19 +208,17 @@ function getLang() {
 
 function setLang() {
 	let lang = getLang()
-	for (const [key, value] of Object.entries(lang["optionsVal"])) {
-		let options = document.getElementById("date").options
-		for (let i = 0; i < options.length; i++) {
-			if (options[i].value == key) options[i].text = value
-		}
+	for (const [key, value] of Object.entries(lang.optionsVal)) {
+		const options = document.getElementById("date").options
+		options.namedItem(key).text = value
 	}
-	document.getElementById("response").innerHTML = lang["response"]
-	document.getElementById("lang1").innerHTML = lang["lang1"]
-	document.getElementById("lang2").innerHTML = lang["lang2"]
-	document.getElementById("lang3").innerHTML = lang["lang3"]
-	document.getElementById("submit").innerHTML = lang["submit"]
-	document.getElementById("langswitch").innerHTML = lang["langswitch"]
-	document.getElementsByTagName("title")[0].innerText = lang["lang1"]
+	document.getElementById("response").innerHTML = lang.response
+	document.getElementById("lang1").innerHTML = lang.lang1
+	document.getElementById("lang2").innerHTML = lang.lang2
+	document.getElementById("lang3").innerHTML = lang.lang3
+	document.getElementById("submit").innerHTML = lang.submit
+	document.getElementById("langswitch").innerHTML = lang.langswitch
+	document.getElementsByTagName("title")[0].innerText = lang.lang1
 }
 
 function changeLang() {

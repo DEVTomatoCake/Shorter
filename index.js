@@ -58,11 +58,11 @@ export default {
 			if (path == "/" || path == "/index.html" || path == "/style.css" || path == "/index.js" || path == "/screen.png" || path == "/discord.png" || path == "/github.png" || path == "/favicon.ico") {
 				return await getAssetFromKV(
 					{
-					  	request,
-					  	waitUntil: ctx.waitUntil.bind(ctx)
+						request,
+						waitUntil: ctx.waitUntil.bind(ctx)
 					},{
-					  	ASSET_NAMESPACE: env.__STATIC_CONTENT,
-					  	ASSET_MANIFEST: assetManifest
+						ASSET_NAMESPACE: env.__STATIC_CONTENT,
+						ASSET_MANIFEST: assetManifest
 					}
 				)
 			}

@@ -1,9 +1,12 @@
 {
 	"env": {
+		"worker": true,
 		"browser": true,
 		"es2022": true
 	},
-	"sourceType": "module",
+	"parserOptions": {
+		"sourceType": "module"
+	},
 	"plugins": ["html", "@html-eslint", "unicorn", "sonarjs"],
 	"settings": {
 		"html/html-extensions": [".html"]
