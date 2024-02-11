@@ -39,7 +39,7 @@ async function createURL() {
 			else document.getElementById("response").innerHTML =
 				"The link was successfully created at <a href='https://sh0rt.zip/" + data.name + "' id='resulturl'>https://sh0rt.zip/" + data.name + "</a> <button onclick='copy()'>Copy</button>"
 			document.getElementById("qrimage").src = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent("https://sh0rt.zip/" + data.name) + "&size=150x150&qzone=2"
-			document.getElementById("qrimage").style.display = "block"
+			document.getElementById("qrimage").removeAttribute("hidden")
 		} else {
 			switch (data.error) {
 				case "missingurlbody":

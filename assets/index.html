@@ -1,32 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Create a short URL</title>
+		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="Create a short URL within seconds" />
-		<meta name="theme-color" content="#e4b400">
-		<meta property="og:type" name="og:type" content="shorter" />
-		<meta property="og:image" content="https://sh0rt.zip/screen.png" />
-		<meta data-react-helmet="true" property="twitter:image" name="twitter:image" content="https://sh0rt.zip/screen.png" />
-		<meta data-react-helmet="true" property="og:image" name="og:image" content="https://sh0rt.zip/screen.png" />
 
-		<link href="./favicon.ico" rel="shortcut icon" type="image/x-icon" />
-		<link href="./favicon.ico" rel="icon" type="image/x-icon" />
+		<title>Create a short URL</title>
+		<meta name="description" content="Create a short URL within seconds">
+		<meta name="theme-color" content="#e4b400">
+		<meta property="og:type" name="og:type" content="shorter">
+		<meta property="og:image" content="https://sh0rt.zip/screen.png">
+		<meta data-react-helmet="true" property="twitter:image" name="twitter:image" content="https://sh0rt.zip/screen.png">
+		<meta data-react-helmet="true" property="og:image" name="og:image" content="https://sh0rt.zip/screen.png">
+
+		<link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
+		<link href="./favicon.ico" rel="icon" type="image/x-icon">
 		<script src="./index.js" defer></script>
-		<link rel="stylesheet" href="./style.css"/>
+		<link rel="stylesheet" href="./style.css">
 	</head>
 	<body onload="setup()">
 		<main>
-			<button id="langswitch" onclick="changeLang()">English</button>
+			<button type="button" id="langswitch" onclick="changeLang()">English</button>
 			<h1 id="lang1">Short-URL erstellen</h1>
 			<br>
 			<form autocomplete="off" id="createForm">
 				<div id="contentgrid">
-					<label for="url">URL<span>*</span>:</label>
+					<label for="url">
+						URL<span>*</span>:
+					</label>
 					<input id="url" type="url" name="shorturl" required>
+
 					<label for="name" id="lang2">Short-Name:</label>
 					<input id="name" type="text" name="shortname">
-					<label for="date" id="lang3">Ablaufdatum<span>*</span>:</label>
+
+					<label for="date" id="lang3">
+						Ablaufdatum<span>*</span>:
+					</label>
 					<div>
 						<select name="shortdate_predef" id="date" required onchange="update()">
 							<option value="15m">15 Minuten</option>
@@ -46,21 +54,23 @@
 						<input id="date_userdef" name="shortdate" type="hidden">
 					</div>
 				</div>
-				<center><button type="submit" id="submit">Erstellen</button></center>
+				<center>
+					<button type="submit" id="submit">Erstellen</button>
+				</center>
 			</form>
 			<br>
 			<fieldset>
 				<legend>Status:</legend>
 				<p id="response">Warte auf Eingabe...</p>
-				<img id="qrimage" style="display: none;" />
+				<img id="qrimage" alt="Generated QR code for the short URL" hidden>
 			</fieldset>
 		</main>
 		<footer>
 			<a href="https://github.com/DEVTomatoCake/Shorter">
-				<img src="./github.png" alt="GitHub" width="32" height="32">
+				<img src="./github.png" alt="GitHub icon linking to the source code of the website" width="32" height="32">
 			</a>
 			<a href="https://discord.gg/ZqzFUC8qe9">
-				<img src="./discord.png" alt="Discord" width="40" height="30">
+				<img src="./discord.png" alt="Discord icon linking to the developers support server" width="40" height="30">
 			</a>
 		</footer>
 	</body>
