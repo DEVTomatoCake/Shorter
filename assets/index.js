@@ -1,11 +1,9 @@
 function setup() {
-	const formElem = document.getElementById("createForm")
-
 	const userLang = navigator.language || navigator.userLanguage
 	sessionStorage.setItem("lang", "de")
 	if (userLang && userLang.split("-")[0] != "de") changeLang()
 
-	formElem.addEventListener("submit", e => {
+	document.getElementById("createForm").addEventListener("submit", e => {
 		e.preventDefault()
 		createURL()
 	})
@@ -27,7 +25,8 @@ async function createURL() {
 	fetch(location.href, {
 		method: "POST",
 		headers: {
-			"Content-Type": "application/json"
+			"Content-Type": "application/json",
+			Accept: "application/json"
 		},
 		body: JSON.stringify({url: shorturl, name, date})
 	})
@@ -36,10 +35,10 @@ async function createURL() {
 		console.log("Response received", data)
 		if (data.name) {
 			if (sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML =
-				"Der Link wurde erfolgreich unter <a href='https://shorter.cf/" + data.name + "' id='resulturl'>https://shorter.cf/" + data.name + "</a> erstellt <button onclick='copy()'>Kopieren</button>"
+				"Der Link wurde erfolgreich unter <a href='https://sh0rt.zip/" + data.name + "' id='resulturl'>https://sh0rt.zip/" + data.name + "</a> erstellt <button onclick='copy()'>Kopieren</button>"
 			else document.getElementById("response").innerHTML =
-				"The link was successfully created at <a href='https://shorter.cf/" + data.name + "' id='resulturl'>https://shorter.cf/" + data.name + "</a> <button onclick='copy()'>Copy</button>"
-			document.getElementById("qrimage").src = "https://api.qrserver.com/v1/create-qr-code/?data=https%3A%2F%2Fshorter.cf%2F" + encodeURIComponent(data.name) + "&size=150x150&qzone=2"
+				"The link was successfully created at <a href='https://sh0rt.zip/" + data.name + "' id='resulturl'>https://sh0rt.zip/" + data.name + "</a> <button onclick='copy()'>Copy</button>"
+			document.getElementById("qrimage").src = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent("https://sh0rt.zip/" + data.name) + "&size=150x150&qzone=2"
 			document.getElementById("qrimage").style.display = "block"
 		} else {
 			switch (data.error) {
@@ -56,8 +55,8 @@ async function createURL() {
 					else document.getElementById("response").innerHTML = "The name is already taken"
 					break
 				default:
-					if (sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Ein unbekannter Fehler ist aufgetreten"
-					else document.getElementById("response").innerHTML = "An unknown error occurred"
+					if (sessionStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Ein unbekannter Fehler ist aufgetreten: " + data.error
+					else document.getElementById("response").innerHTML = "An unknown error occurred: " + data.error
 			}
 		}
 	})

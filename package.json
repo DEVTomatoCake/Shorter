@@ -3,18 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "author": "TomatoCake, BLACK",
-  "scripts": {
-    "lint": "eslint . --ext .html,.js --report-unused-disable-directives"
-  },
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.3.0"
+    "@cloudflare/kv-asset-handler": "^0.3.1"
   },
   "devDependencies": {
-    "@html-eslint/eslint-plugin": "^0.21.0",
-    "@html-eslint/parser": "^0.21.0",
-    "eslint": "^8.54.0",
-    "eslint-plugin-html": "^7.1.0",
+    "@html-eslint/eslint-plugin": "^0.23.1",
+    "@html-eslint/parser": "^0.23.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-html": "^8.0.0",
     "eslint-plugin-sonarjs": "^0.23.0",
-    "eslint-plugin-unicorn": "^49.0.0"
+    "eslint-plugin-unicorn": "^51.0.1"
   }
 }

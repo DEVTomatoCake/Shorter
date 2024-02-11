@@ -47,9 +47,9 @@ const urlsESLint = {
 const discordEmbed =
 	"<meta property='og:title' content='Short-URL' />" +
 	"<meta property='og:type' name='og:type' content='shorter' />" +
-	"<meta property='og:image' content='https://shorter.cf/assets/screen.png' />" +
-	"<meta data-react-helmet='true' property='twitter:image' name='twitter:image' content='https://shorter.cf/assets/screen.png' />" +
-	"<meta data-react-helmet='true' property='og:image' name='og:image' content='https://shorter.cf/assets/screen.png' />"
+	"<meta property='og:image' content='https://sh0rt.zip/assets/screen.png' />" +
+	"<meta data-react-helmet='true' property='twitter:image' name='twitter:image' content='https://sh0rt.zip/assets/screen.png' />" +
+	"<meta data-react-helmet='true' property='og:image' name='og:image' content='https://sh0rt.zip/assets/screen.png' />"
 
 export default {
 	async fetch(request, env, ctx) {
@@ -77,7 +77,7 @@ export default {
 			const url = isESLint ? urlsESLint[path.split("/")[1].toLowerCase()].replace("{RULE}", path.split("/").slice(2).join("/"))
 				: await env.SHORTER_URLS.get(path.split("/")[1].toLowerCase())
 
-			if (!url && target == "embed") return new Response(discordEmbed + "<meta property='og:url' content='https://shorter.cf' /><meta property='og:description' content='Unknown Short-URL' /><meta name='theme-color' content='#FF0000'>", {
+			if (!url && target == "embed") return new Response(discordEmbed + "<meta property='og:url' content='https://sh0rt.zip' /><meta property='og:description' content='Unknown Short-URL' /><meta name='theme-color' content='#FF0000'>", {
 				headers: { "Content-Type": "text/html" }
 			})
 			if (!url) return new Response("Unknown short URL", { status: 404 })
@@ -115,16 +115,17 @@ export default {
 						"Access-Control-Max-Age": 7200
 					}
 				})
-				if (parsed.url.includes("://shorter.cf") || !new RegExp(/https?:\/\/(([-a-z0-9]+\.)+)?[-a-z0-9]+\.[a-z0-9]+(\/.+)?/gi).test(parsed.url)) return new Response(JSON.stringify({error: "url_invalid"}), {
-					status: 422,
-					headers: {
-						"Content-Type": "application/json",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-						"Access-Control-Allow-Headers": "Content-Type",
-						"Access-Control-Max-Age": 7200
-					}
-				})
+				if (parsed.url.includes("://sh0rt.zip") || !new RegExp(/https?:\/\/(([-a-z0-9]+\.)+)?[-a-z0-9]+\.[a-z0-9]+(\/.+)?/gi).test(parsed.url))
+					return new Response(JSON.stringify({error: "url_invalid"}), {
+						status: 422,
+						headers: {
+							"Content-Type": "application/json",
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+							"Access-Control-Allow-Headers": "Content-Type",
+							"Access-Control-Max-Age": 7200
+						}
+					})
 
 				const name = parsed.name || Math.random().toString(36).slice(9)
 				const existing = await env.SHORTER_URLS.get(name.toLowerCase())

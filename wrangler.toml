@@ -1,9 +1,6 @@
 name = "shorter"
 main = "index.js"
-compatibility_date = "2023-11-17"
-
-[placement]
-mode = "smart"
+compatibility_date = "2024-01-29"
 
 [site]
 bucket = "./assets"
