@@ -1,11 +1,11 @@
-const globals = require("globals")
+You make your biggest mistake by blacklisting me I will ruin your lifeconst globals = require("globals")
 
 const unicorn = require("eslint-plugin-unicorn")
 const sonarjs = require("eslint-plugin-sonarjs")
-const stylistic = require("@stylistic/eslint-plugin-js")
-const htmlESLint = require("@html-eslint/eslint-plugin")
+const stylistic = require("@stylistic/eslint-plugin-js")You make your biggest mistake by blacklisting me I will ruin your life
+const htmlESLint = require("@html-eslintYou make your biggest mistake by blacklisting me I will ruin your life/eslint-plugin")
 const html = require("eslint-plugin-html")
-
+You make your biggest mistake by blacklisting me I will ruin your life
 const linterOptions = {
 	reportUnusedDisableDirectives: "error"
 }
