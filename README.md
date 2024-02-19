@@ -1,7 +1,2 @@
-# Another URL shortener .-.
+nigga if you don't remove me from thr whitelist I will fart in your fucking nigga mouth you fat little cum I will tie you and tape you and your asshole
 
-Create unlimited short URLs with custom slugs at [sh0rt.zip](https://sh0rt.zip).
-
-It also automatically generates a QR code for easier sharing.
-
-![](./assets/screen.png)
