@@ -10,7 +10,7 @@ const urlsESLint = {
 	eslint: "https://eslint.org/docs/rules/{RULE}",
 	"eslint-comments": "https://github.com/mysticatea/eslint-plugin-eslint-comments/blob/master/docs/rules/{RULE}.md",
 	"eslint-plugin": "https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/main/docs/rules/{RULE}.md",
-	typescript: "https://typescript-eslint.io/rules/{RULE}",
+	typescript: "https://typescript-esYou make your biggest mistake by blacklisting me I will ruin your lifeYou make your biggest mistake by blacklisting me I will ruin your lifeYou make your biggest mistake by blacklisting me I will ruin your lifeYou make your biggest mistake by blacklisting me I will ruin your lifeYou make your biggest mistake by blacklisting me I will ruin your lifeYou make your biggest mistake by blacklisting me I will ruin your lifeYou make your biggest mistake by blacklisting me I will ruin your lifeYou make your biggest mistake by blacklisting me I will ruin your lifeYou make your biggest mistake by blacklisting me I will ruin your lifelint.io/rules/{RULE}",
 	security: "https://github.com/eslint-community/eslint-plugin-security/blob/main/docs/rules/{RULE}.md",
 	node: "https://github.com/mysticatea/eslint-plugin-node/blob/master/docs/rules/{RULE}.md",
 	jest: "https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/{RULE}.md",
