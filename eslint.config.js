@@ -311,7 +311,7 @@ module.exports = [
 			"@html-eslint/no-trailing-spaces": 2,
 			"@html-eslint/indent": [2, "tab"],
 			"@html-eslint/no-duplicate-attrs": 2,
-			"@html-eslint/no-inline-styles": 1,
+			"@html-eslint/no-inline-styles": 2,
 			"@html-eslint/no-duplicate-id": 2,
 			"@html-eslint/no-script-style-type": 2,
 			"@html-eslint/require-li-container": 2,

@@ -1,6 +1,6 @@
 {
-	"$schema": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/bd2fb876109c7e2c8cf9fa943746b2c77a9fe6f1/schemas/v3.0/schema.json",
-	"openapi": "3.0.0",
+	"$schema": "https://spec.openapis.org/oas/3.1/dialect/base",
+	"openapi": "3.1.0",
 	"servers": [
 		{
 			"description": "Sh0rt.zip API",
@@ -9,13 +9,47 @@
 	],
 	"info": {
 		"description": "This API lets you create short URLs and get information about them.",
-		"version": "1.1.0",
+		"version": "1.2.0",
 		"title": "Short URL API",
 		"contact": {
 			"url": "https://discord.gg/ZqzFUC8qe9"
 		}
 	},
 	"paths": {
+		"/{url}": {
+			"get": {
+				"summary": "Redirect to target",
+				"description": "Searches for a short URL with the given name and redirects to the target URL. Appended path and query parameters are preserved.",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "url",
+						"description": "The short URL name to redirect to",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "bundbot"
+						}
+					}
+				],
+				"responses": {
+					"302": {
+						"description": "Redirect to target URL"
+					},
+					"404": {
+						"description": "Short URL does not exist",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "string",
+									"example": "Unknown short URL"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/{url}": {
 			"get": {
 				"summary": "Short URL target",
@@ -59,28 +93,78 @@
 				}
 			}
 		},
-		"/{url}": {
+		"/{eslint-plugin}/{rule}": {
 			"get": {
-				"summary": "Redirect to target",
-				"description": "Redirects to the short URLs target URL",
+				"summary": "ESLint plugin rule",
+				"description": "Redirects to the rule documentation of the given ESLint plugin",
 				"parameters": [
 					{
 						"in": "path",
-						"name": "url",
-						"description": "The short URL name to redirect to",
+						"name": "eslint-plugin",
+						"description": "The ESLint plugin name",
 						"required": true,
 						"schema": {
 							"type": "string",
-							"example": "bundbot"
+							"enum": [
+								"angular",
+								"ava",
+								"cypress",
+								"es",
+								"eslint",
+								"stylistic",
+								"stylisticjs",
+								"stylisticts",
+								"eslint-comments",
+								"eslint-plugin",
+								"typescript",
+								"security",
+								"node",
+								"jest",
+								"stylelint",
+								"react",
+								"import",
+								"jasmine",
+								"mocha",
+								"svelte",
+								"redux-saga",
+								"jsx-a11y",
+								"lodash",
+								"testing-library",
+								"html",
+								"promise",
+								"nuxt",
+								"vue-a11y",
+								"fp",
+								"lit",
+								"jquery",
+								"sonarjs",
+								"unicorn",
+								"ember",
+								"react-native",
+								"jsonc",
+								"flowtype",
+								"vue",
+								"wc",
+								"xss",
+								"yml"
+							],
+							"example": "eslint"
+						}
+					},
+					{
+						"in": "path",
+						"name": "rule",
+						"description": "The rule name",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "no-dupe-keys"
 						}
 					}
 				],
 				"responses": {
 					"302": {
-						"description": "Redirect to target URL"
-					},
-					"404": {
-						"description": "Unknown short URL"
+						"description": "Redirects to the documentation of the given ESLint plugin, regardless of whether the rule exists there or not."
 					}
 				}
 			}
@@ -110,7 +194,7 @@
 										"default": "<4 random characters>"
 									},
 									"date": {
-										"description": "When to delete the short URL. Must be parseable using `new Date()`",
+										"description": "When to delete the short URL. Must be parseable using JavaScripts `Date()`.",
 										"type": "string",
 										"format": "date-time",
 										"example": "2024-02-24T14:58:26.710Z",
@@ -123,7 +207,7 @@
 				},
 				"responses": {
 					"201": {
-						"description": "Short URL created",
+						"description": "Short URL was created successfully at the given name.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -142,7 +226,7 @@
 						}
 					},
 					"409": {
-						"description": "There is already a short URL with that name",
+						"description": "There is already a short URL with that name.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -155,8 +239,7 @@
 											"type": "string",
 											"enum": [
 												"name_alreadyexists"
-											],
-											"default": "name_alreadyexists"
+											]
 										}
 									}
 								}
@@ -164,7 +247,7 @@
 						}
 					},
 					"422": {
-						"description": "Invalid input which prevents the short URL from being created",
+						"description": "Invalid input which prevents the short URL from being created, such as an invalid URL or a redirect loop.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -184,9 +267,6 @@
 								}
 							}
 						}
-					},
-					"500": {
-						"description": "An error occured while creating"
 					}
 				}
 			}
