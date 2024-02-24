@@ -97,9 +97,7 @@ footer {
 	justify-content: center;
 	color: #fff;
 	margin: 15px 0 30px;
-}
-footer a:last-child {
-	margin-left: 10px;
+	gap: 10px;
 }
 footer img:hover {
 	transform: scale(1.1);

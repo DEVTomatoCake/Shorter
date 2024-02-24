@@ -127,21 +127,28 @@ export default {
 						}
 					})
 
-				const name = parsed.name || Math.random().toString(36).slice(9)
-				const existing = await env.SHORTER_URLS.get(name.toLowerCase())
-				if (existing) return new Response(JSON.stringify({error: "name_alreadyexists"}), {
-					status: 422,
-					headers: {
-						"Content-Type": "application/json",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-						"Access-Control-Allow-Headers": "Content-Type",
-						"Access-Control-Max-Age": 7200
-					}
-				})
+				let name = ""
+				if (parsed.name) {
+					name = parsed.name
+					const existing = await env.SHORTER_URLS.get(name.toLowerCase())
+					if (existing) return new Response(JSON.stringify({error: "name_alreadyexists"}), {
+						status: 409,
+						headers: {
+							"Content-Type": "application/json",
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+							"Access-Control-Allow-Headers": "Content-Type",
+							"Access-Control-Max-Age": 7200
+						}
+					})
+				} else {
+					name = Math.random().toString(36).slice(9)
+					while (await env.SHORTER_URLS.get(name.toLowerCase())) name = Math.random().toString(36).slice(8)
+				}
 
 				const date = parsed.date ? new Date(parsed.date).getTime() : Date.now() + 1000 * 60 * 60 * 24 * 5
 				await env.SHORTER_URLS.put(name.toLowerCase(), parsed.url, {expiration: date / 1000})
+
 				return new Response(JSON.stringify({name}), {
 					status: 201,
 					headers: {

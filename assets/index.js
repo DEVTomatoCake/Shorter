@@ -202,14 +202,15 @@ const langen = {
 
 function getLang() {
 	if (sessionStorage.getItem("lang") == "de") return langde
-	else return langen
+	return langen
 }
 
 function setLang() {
-	let lang = getLang()
+	const lang = getLang()
+
+	document.getElementById("date").innerHTML = ""
 	for (const [key, value] of Object.entries(lang.optionsVal)) {
-		const options = document.getElementById("date").options
-		options.namedItem(key).text = value
+		document.getElementById("date").innerHTML += "<option value='" + key + "'>" + value + "</option>"
 	}
 	document.getElementById("response").innerHTML = lang.response
 	document.getElementById("lang1").innerHTML = lang.lang1

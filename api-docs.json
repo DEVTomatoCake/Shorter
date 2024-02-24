@@ -1,0 +1,195 @@
+{
+	"$schema": "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/bd2fb876109c7e2c8cf9fa943746b2c77a9fe6f1/schemas/v3.0/schema.json",
+	"openapi": "3.0.0",
+	"servers": [
+		{
+			"description": "Sh0rt.zip API",
+			"url": "https://sh0rt.zip/"
+		}
+	],
+	"info": {
+		"description": "This API lets you create short URLs and get information about them.",
+		"version": "1.1.0",
+		"title": "Short URL API",
+		"contact": {
+			"url": "https://discord.gg/ZqzFUC8qe9"
+		}
+	},
+	"paths": {
+		"/api/{url}": {
+			"get": {
+				"summary": "Short URL target",
+				"description": "Returns the target URL of an short URL",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "url",
+						"description": "The short URL name",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "bundbot"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "The short URL target URL",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"url"
+									],
+									"properties": {
+										"url": {
+											"type": "string",
+											"format": "url",
+											"example": "https://github.com/DEVTomatoCake/Bundbot"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Unknown short URL"
+					}
+				}
+			}
+		},
+		"/{url}": {
+			"get": {
+				"summary": "Redirect to target",
+				"description": "Redirects to the short URLs target URL",
+				"parameters": [
+					{
+						"in": "path",
+						"name": "url",
+						"description": "The short URL name to redirect to",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"example": "bundbot"
+						}
+					}
+				],
+				"responses": {
+					"302": {
+						"description": "Redirect to target URL"
+					},
+					"404": {
+						"description": "Unknown short URL"
+					}
+				}
+			}
+		},
+		"/": {
+			"post": {
+				"summary": "Creates a short URL",
+				"description": "Creates a short URL to the given target",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"required": [
+									"url"
+								],
+								"properties": {
+									"url": {
+										"type": "string",
+										"format": "url",
+										"example": "https://github.com/DEVTomatoCake/Bundbot"
+									},
+									"name": {
+										"description": "Name of the short URL to use after https://sh0rt.zip/",
+										"type": "string",
+										"example": "bundbot",
+										"default": "<4 random characters>"
+									},
+									"date": {
+										"description": "When to delete the short URL. Must be parseable using `new Date()`",
+										"type": "string",
+										"format": "date-time",
+										"example": "2024-02-24T14:58:26.710Z",
+										"default": "<five days from now>"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Short URL created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"name"
+									],
+									"properties": {
+										"name": {
+											"type": "string",
+											"example": "bundbot"
+										}
+									}
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "There is already a short URL with that name",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"error"
+									],
+									"properties": {
+										"error": {
+											"type": "string",
+											"enum": [
+												"name_alreadyexists"
+											],
+											"default": "name_alreadyexists"
+										}
+									}
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Invalid input which prevents the short URL from being created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"error"
+									],
+									"properties": {
+										"error": {
+											"type": "string",
+											"enum": [
+												"missingurlbody",
+												"url_invalid"
+											]
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occured while creating"
+					}
+				}
+			}
+		}
+	}
+}
