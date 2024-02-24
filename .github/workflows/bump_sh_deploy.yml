@@ -15,6 +15,6 @@ jobs:
       - name: Deploy API documentation
         uses: bump-sh/github-action@v1
         with:
-          doc: ${{ variables.BUMP_SH_DOCID }}
+          doc: ${{ env.BUMP_SH_DOCID }}
           token: ${{ secrets.BUMP_SH_TOKEN }}
           file: api-docs.json
