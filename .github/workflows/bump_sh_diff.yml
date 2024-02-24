@@ -16,7 +16,7 @@ jobs:
       - name: Comment pull request with API diff
         uses: bump-sh/github-action@v1
         with:
-          doc: ${{ env.BUMP_SH_DOCID }}
+          doc: 41ac0bef-ea5a-44a1-a763-eb10d17d4b71
           token: ${{ secrets.BUMP_SH_TOKEN }}
           file: api-docs.json
           command: diff
