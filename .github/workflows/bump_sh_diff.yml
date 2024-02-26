@@ -1,4 +1,4 @@
-name: Check API documentation
+name: Diff API documentation
 permissions:
   contents: read
   pull-requests: write
