@@ -57,17 +57,18 @@ export default {
 	async fetch(request, env, ctx) {
 		let path = decodeURI((new URL(request.url)).pathname)
 		if (request.method == "GET") {
-			if (path == "/" || path == "/index.html" || path == "/style.css" || path == "/index.js" || path == "/screen.png" || path == "/discord.png" || path == "/github.png" || path == "/favicon.ico") {
-				return await getAssetFromKV(
-					{
-						request,
-						waitUntil: ctx.waitUntil.bind(ctx)
-					},{
-						ASSET_NAMESPACE: env.__STATIC_CONTENT,
-						ASSET_MANIFEST: assetManifest
-					}
-				)
-			}
+			if (
+				path == "/" || path == "/index.html" || path == "/style.css" || path == "/index.js" ||
+				path == "/screen.png" || path == "/discord.png" || path == "/github.png" || path == "/favicon.ico" || path == "/document-text-outline.svg"
+			) return await getAssetFromKV(
+				{
+					request,
+					waitUntil: ctx.waitUntil.bind(ctx)
+				},{
+					ASSET_NAMESPACE: env.__STATIC_CONTENT,
+					ASSET_MANIFEST: assetManifest
+				}
+			)
 
 			let target = "redirect"
 			if (path.startsWith("/api/")) {
