@@ -81,7 +81,9 @@ export default {
 				: await env.SHORTER_URLS.get(path.split("/")[1].toLowerCase())
 
 			if (!url && target == "embed") return new Response(discordEmbed + "<meta property='og:url' content='https://sh0rt.zip'><meta property='og:description' content='Unknown Short-URL'><meta name='theme-color' content='#FF0000'>", {
-				headers: { "Content-Type": "text/html" }
+				headers: {
+					"Content-Type": "text/html"
+				}
 			})
 			if (!url) return new Response("Unknown short URL", { status: 404 })
 
@@ -102,7 +104,9 @@ export default {
 				}
 			})
 			return new Response(discordEmbed + "<meta property='og:description' content='" + redirect + "'><meta name='theme-color' content='#33FF33'>", {
-				headers: { "Content-Type": "text/html" }
+				headers: {
+					"Content-Type": "text/html"
+				}
 			})
 		} else if (request.method == "POST") {
 			const body = await request.text()
@@ -163,7 +167,7 @@ export default {
 					}
 				})
 			} catch (err) {
-				return new Response(err, { status: 500 })
+				return new Response("Received invalid JSON, or another error occured: " + err, { status: 400 })
 			}
 		} else if (request.method == "OPTIONS") {
 			return new Response("", {

@@ -9,7 +9,6 @@ button, input {
 	margin: 7px 0;
 	background: #0b487e;
 	padding: 2px;
-	border: 3px solid #2b38cf;
 	box-shadow: 0 0 10px #0077ff;
 	font-size: 130%;
 	color:rgb(252, 250, 250);
@@ -57,9 +56,15 @@ fieldset {
 	background: #0f5899;
 }
 
-#createForm span {
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+form span {
 	color: red;
 }
+
 #contentgrid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -72,7 +77,6 @@ select {
 	margin: 7px 0;
 	background: #0b487e;
 	padding: 2px;
-	border: 3px solid #2b38cf;
 	box-shadow: 0 0 10px #0077ff;
 	font-size: 120%;
 	color:rgb(252, 250, 250);

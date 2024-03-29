@@ -17,26 +17,27 @@
 		<script src="./index.js" defer></script>
 		<link rel="stylesheet" href="./style.css">
 	</head>
-	<body onload="setup()">
+	<body>
 		<main>
-			<button type="button" id="langswitch" onclick="changeLang()">English</button>
+			<button type="button" id="langswitch">English</button>
 			<h1 id="lang1">Short-URL erstellen</h1>
 			<br>
+
 			<form autocomplete="off" id="createForm">
 				<div id="contentgrid">
-					<label for="url">
-						URL<span>*</span>:
+					<label for="url" id="target-uri">
+						Ziel-URI<span>*</span>:
 					</label>
 					<input id="url" type="url" name="shorturl" required>
 
-					<label for="name" id="lang2">Short-Name:</label>
+					<label for="name" id="short-name-label">Short-Name:</label>
 					<input id="name" type="text" name="shortname">
 
 					<label for="date" id="lang3">
 						Ablaufdatum<span>*</span>:
 					</label>
 					<div>
-						<select name="shortdate_predef" id="date" required onchange="update()">
+						<select name="shortdate_predef" id="date" required>
 							<option value="15m">15 Minuten</option>
 							<option value="1h">1 Stunde</option>
 							<option value="8h">8 Stunden</option>
@@ -51,12 +52,15 @@
 							<option value="1y">1 Jahr</option>
 							<option value="custom">Benutzerdefiniert</option>
 						</select>
-						<input id="date_userdef" name="shortdate" type="hidden">
+
+						<div id="date-custom-container" hidden>
+							<br>
+							<input id="date-custom" name="shortdate" type="datetime-local">
+						</div>
 					</div>
 				</div>
-				<center>
-					<button type="submit" id="submit">Erstellen</button>
-				</center>
+
+				<button type="submit" id="submit">Erstellen</button>
 			</form>
 			<br>
 			<fieldset>
@@ -66,13 +70,13 @@
 			</fieldset>
 		</main>
 		<footer>
-			<a href="https://github.com/DEVTomatoCake/Shorter" title="Source code" target="_blank" rel="noopener">
+			<a href="https://github.com/DEVTomatoCake/Shorter" title="Source code" target="_blank" rel="noopener noreferrer">
 				<img src="./github.png" alt="GitHub icon linking to the source code of the website" width="32" height="32">
 			</a>
-			<a href="https://discord.gg/ZqzFUC8qe9" title="Support server" target="_blank" rel="noopener">
+			<a href="https://discord.gg/ZqzFUC8qe9" title="Support server" target="_blank" rel="noopener noreferrer">
 				<img src="./discord.png" alt="Discord icon linking to the developers support server" width="40" height="30">
 			</a>
-			<a href="https://docs.sh0rt.zip" title="API docs" target="_blank" rel="noopener">
+			<a href="https://docs.sh0rt.zip" title="API docs">
 				<img src="./document-text-outline.svg" alt="API docs" width="30" height="30">
 			</a>
 		</footer>
