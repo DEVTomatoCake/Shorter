@@ -88,15 +88,14 @@ const blacklistedUsernames = new Set([
 const discordEmbed =
 	"<meta property='og:title' content='Short-URL'>" +
 	"<meta property='og:type' name='og:type' content='shorter'>" +
-	"<meta property='og:image' content='https://sh0rt.zip/assets/screen.png'>" +
-	"<meta data-react-helmet='true' property='twitter:image' name='twitter:image' content='https://sh0rt.zip/assets/screen.png'>" +
-	"<meta data-react-helmet='true' property='og:image' name='og:image' content='https://sh0rt.zip/assets/screen.png'>"
+	"<meta property='og:image' content='https://sh0rt.zip/assets/screen.webp'>" +
+	"<meta data-react-helmet='true' property='twitter:image' name='twitter:image' content='https://sh0rt.zip/assets/screen.webp'>" +
+	"<meta data-react-helmet='true' property='og:image' name='og:image' content='https://sh0rt.zip/assets/screen.webp'>"
 
 export default {
 	async fetch(request, env, ctx) {
 		let path = decodeURI((new URL(request.url)).pathname)
 		if (request.method == "GET") {
-			console.log(path)
 			if (path == "/" || path == "/index.html" || path == "/favicon.ico" || path.startsWith("/assets/")) return await getAssetFromKV(
 				{
 					request,
