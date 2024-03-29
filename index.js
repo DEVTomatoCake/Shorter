@@ -96,7 +96,8 @@ export default {
 	async fetch(request, env, ctx) {
 		let path = decodeURI((new URL(request.url)).pathname)
 		if (request.method == "GET") {
-			if (path.startsWith("/assets/")) return await getAssetFromKV(
+			console.log(path)
+			if (path == "/" || path == "/index.html" || path == "/favicon.ico" || path.startsWith("/assets/")) return await getAssetFromKV(
 				{
 					request,
 					waitUntil: ctx.waitUntil.bind(ctx)
