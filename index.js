@@ -46,6 +46,45 @@ const urlsESLint = {
 	yml: "https://ota-meshi.github.io/eslint-plugin-yml/rules/{RULE}.html"
 }
 
+const blacklistedPaths = new Set([
+	"api",
+	"assets",
+	"robots.txt",
+	"favicon.ico",
+	".well-known",
+	"about",
+	"info",
+	"localhost",
+	"localdomain",
+	"broadcasthost",
+	"www",
+	"wpad",
+	"isatap",
+	"imap",
+	"pop",
+	"pop3",
+	"smtp",
+	"mail",
+	"admin",
+	Object.keys(urlsESLint)
+])
+const blacklistedUsernames = new Set([
+	...[...blacklistedPaths],
+	"administrator",
+	"webmaster",
+	"hostmaster",
+	"root",
+	"ssladmin",
+	"ssladministrator",
+	"sysadmin",
+	"support",
+	"abuse",
+	"security",
+	"nobody",
+	"noreply",
+	"no-reply"
+])
+
 const discordEmbed =
 	"<meta property='og:title' content='Short-URL'>" +
 	"<meta property='og:type' name='og:type' content='shorter'>" +
@@ -57,10 +96,7 @@ export default {
 	async fetch(request, env, ctx) {
 		let path = decodeURI((new URL(request.url)).pathname)
 		if (request.method == "GET") {
-			if (
-				path == "/" || path == "/index.html" || path == "/style.css" || path == "/index.js" ||
-				path == "/screen.png" || path == "/discord.png" || path == "/github.png" || path == "/favicon.ico" || path == "/document-text-outline.svg"
-			) return await getAssetFromKV(
+			if (path.startsWith("/assets/")) return await getAssetFromKV(
 				{
 					request,
 					waitUntil: ctx.waitUntil.bind(ctx)
@@ -137,6 +173,19 @@ export default {
 				let name = ""
 				if (parsed.name) {
 					name = parsed.name
+					if (name.startsWith("/")) name = name.slice(1)
+
+					if (blacklistedPaths.has(name.split("/")[0].trim().toLowerCase())) return new Response(JSON.stringify({error: "name_blacklisted"}), {
+						status: 403,
+						headers: {
+							"Content-Type": "application/json",
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+							"Access-Control-Allow-Headers": "Content-Type",
+							"Access-Control-Max-Age": 7200
+						}
+					})
+
 					const existing = await env.SHORTER_URLS.get(name.toLowerCase())
 					if (existing) return new Response(JSON.stringify({error: "name_alreadyexists"}), {
 						status: 409,

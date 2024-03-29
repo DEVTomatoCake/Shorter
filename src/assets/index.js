@@ -54,6 +54,10 @@ async function createURL() {
 					if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
 					else document.getElementById("response").innerHTML = "Please enter a valid URL"
 					break
+				case "name_blacklisted":
+					if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Der Name ist nicht erlaubt"
+					else document.getElementById("response").innerHTML = "The name is not allowed"
+					break
 				case "name_alreadyexists":
 					if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Der Name ist bereits vergeben"
 					else document.getElementById("response").innerHTML = "The name is already taken"
