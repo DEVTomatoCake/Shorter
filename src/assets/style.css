@@ -18,6 +18,7 @@ button, input {
 button {
 	padding: 10px;
 	cursor: pointer;
+	font-size: 24px;
 }
 main {
 	display: flex;

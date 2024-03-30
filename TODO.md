@@ -61,3 +61,4 @@ Angemeldete Nutzer:
 - Device targeting: Pro Gerätetyp (Android, iOS, ...) eine individuelle Ziel-URL, z. B. für Appstore-Links. Wenn nicht sicher oder fehlt wird die Standard-URL verwendet.
 - Backup für Cloudflare-KV
 	- Langfristig andere DB
+- Ein vernünftiges Logo/Icon, vor allem für Manifest/PWA notwendig

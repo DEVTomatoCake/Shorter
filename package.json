@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "author": "TomatoCake, BLACK",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.1"
   },
