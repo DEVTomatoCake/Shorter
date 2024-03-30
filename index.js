@@ -55,6 +55,8 @@ const corsHeaders = {
 
 const blacklistedPaths = new Set([
 	"api",
+	"qr",
+	"report",
 	"assets",
 	"robots.txt",
 	"favicon.ico",
@@ -87,7 +89,6 @@ const blacklistedUsernames = new Set([
 	"support",
 	"abuse",
 	"security",
-	"nobody",
 	"noreply",
 	"no-reply"
 ])

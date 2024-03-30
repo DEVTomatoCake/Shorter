@@ -1,0 +1,35 @@
+{
+	"short_name": "Sh0rt.zip",
+	"name": "Sh0rt.zip is just another URL shortener",
+	"icons": [
+		{
+			"src": "/assets/images/favicon.ico",
+			"type": "image/x-icon",
+			"sizes": "128x128",
+			"purpose": "maskable"
+		}
+	],
+	"id": "/",
+	"start_url": "/",
+	"background_color": "#0F5899",
+	"display_override": ["window-control-overlay", "minimal-ui"],
+	"display": "standalone",
+	"scope": "/",
+	"theme_color": "#0F5899",
+	"shortcuts": [
+		{
+			"name": "View your servers",
+			"short_name": "Server list",
+			"description": "View your servers or invite the bot",
+			"url": "/dashboard"
+		}
+	],
+	"description": "Easily create short URLs for any website using Sh0rt.zip, featuring QR code generation and much more.",
+	"screenshots": [
+		{
+			"src": "/assets/screen.webp",
+			"type": "image/webp",
+			"sizes": "774x647"
+		}
+	]
+}

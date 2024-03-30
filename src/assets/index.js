@@ -55,10 +55,13 @@ const getLang = () => {
 const setLang = () => {
 	const lang = getLang()
 
-	document.getElementById("date").innerHTML = ""
+	let optionHTML = ""
+	const currentSelect = document.getElementById("date").value
 	for (const [key, value] of Object.entries(lang.optionsVal)) {
-		document.getElementById("date").innerHTML += "<option value='" + key + "'>" + value + "</option>"
+		optionHTML += "<option value='" + key + "'" + (key == currentSelect ? " selected" : "") + ">" + value + "</option>"
 	}
+	document.getElementById("date").innerHTML = optionHTML
+
 	document.getElementById("response").innerHTML = lang.response
 	document.getElementById("header-text").innerHTML = lang["header-text"]
 	document.getElementById("target-uri").innerHTML = lang["target-uri"]
@@ -89,6 +92,8 @@ function setup() {
 
 	document.getElementById("langswitch").addEventListener("click", changeLang)
 	document.getElementById("date").addEventListener("change", update)
+
+	if ("serviceWorker" in navigator) navigator.serviceWorker.register("/serviceworker.js")
 }
 document.addEventListener("DOMContentLoaded", setup)
 
