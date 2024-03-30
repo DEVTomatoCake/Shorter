@@ -46,6 +46,13 @@ const urlsESLint = {
 	yml: "https://ota-meshi.github.io/eslint-plugin-yml/rules/{RULE}.html"
 }
 
+const corsHeaders = {
+	"Access-Control-Allow-Origin": "*",
+	"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+	"Access-Control-Allow-Headers": "Content-Type",
+	"Access-Control-Max-Age": 7200
+}
+
 const blacklistedPaths = new Set([
 	"api",
 	"assets",
@@ -69,7 +76,7 @@ const blacklistedPaths = new Set([
 	Object.keys(urlsESLint)
 ])
 const blacklistedUsernames = new Set([
-	...[...blacklistedPaths],
+	...blacklistedPaths,
 	"administrator",
 	"webmaster",
 	"hostmaster",
@@ -116,11 +123,12 @@ export default {
 			const url = isESLint ? urlsESLint[path.split("/")[1].toLowerCase()].replace("{RULE}", path.split("/").slice(2).join("/"))
 				: await env.SHORTER_URLS.get(path.split("/")[1].toLowerCase())
 
-			if (!url && target == "embed") return new Response(discordEmbed + "<meta property='og:url' content='https://sh0rt.zip'><meta property='og:description' content='Unknown Short-URL'><meta name='theme-color' content='#FF0000'>", {
-				headers: {
-					"Content-Type": "text/html"
-				}
-			})
+			if (!url && target == "embed")
+				return new Response(discordEmbed + "<meta property='og:url' content='https://sh0rt.zip'><meta property='og:description' content='Unknown Short-URL'><meta name='theme-color' content='#FF0000'>", {
+					headers: {
+						"Content-Type": "text/html"
+					}
+				})
 			if (!url) return new Response("Unknown short URL", { status: 404 })
 
 			let redirect = url + (isESLint ? "" : path.split("/").slice(2).join("/"))
@@ -133,10 +141,7 @@ export default {
 			if (target == "api") return new Response(JSON.stringify({url: redirect}), {
 				headers: {
 					"Content-Type": "application/json",
-					"Access-Control-Allow-Origin": "*",
-					"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-					"Access-Control-Allow-Headers": "Content-Type",
-					"Access-Control-Max-Age": 7200
+					...corsHeaders
 				}
 			})
 			return new Response(discordEmbed + "<meta property='og:description' content='" + redirect + "'><meta name='theme-color' content='#33FF33'>", {
@@ -152,10 +157,7 @@ export default {
 					status: 422,
 					headers: {
 						"Content-Type": "application/json",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-						"Access-Control-Allow-Headers": "Content-Type",
-						"Access-Control-Max-Age": 7200
+						...corsHeaders
 					}
 				})
 				if (parsed.url.includes("://sh0rt.zip") || !new RegExp(/https?:\/\/(([-a-z0-9]+\.)+)?[-a-z0-9]+\.[a-z0-9]+(\/.+)?/gi).test(parsed.url))
@@ -163,10 +165,7 @@ export default {
 						status: 422,
 						headers: {
 							"Content-Type": "application/json",
-							"Access-Control-Allow-Origin": "*",
-							"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-							"Access-Control-Allow-Headers": "Content-Type",
-							"Access-Control-Max-Age": 7200
+							...corsHeaders
 						}
 					})
 
@@ -174,15 +173,19 @@ export default {
 				if (parsed.name) {
 					name = parsed.name
 					if (name.startsWith("/")) name = name.slice(1)
+					if (name.startsWith("/")) return new Response(JSON.stringify({error: "name_blacklisted"}), {
+						status: 422,
+						headers: {
+							"Content-Type": "application/json",
+							...corsHeaders
+						}
+					})
 
 					if (blacklistedPaths.has(name.split("/")[0].trim().toLowerCase())) return new Response(JSON.stringify({error: "name_blacklisted"}), {
 						status: 403,
 						headers: {
 							"Content-Type": "application/json",
-							"Access-Control-Allow-Origin": "*",
-							"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-							"Access-Control-Allow-Headers": "Content-Type",
-							"Access-Control-Max-Age": 7200
+							...corsHeaders
 						}
 					})
 
@@ -191,10 +194,7 @@ export default {
 						status: 409,
 						headers: {
 							"Content-Type": "application/json",
-							"Access-Control-Allow-Origin": "*",
-							"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-							"Access-Control-Allow-Headers": "Content-Type",
-							"Access-Control-Max-Age": 7200
+							...corsHeaders
 						}
 					})
 				} else {
@@ -209,10 +209,7 @@ export default {
 					status: 201,
 					headers: {
 						"Content-Type": "application/json",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-						"Access-Control-Allow-Headers": "Content-Type",
-						"Access-Control-Max-Age": 7200
+						...corsHeaders
 					}
 				})
 			} catch (err) {
@@ -221,12 +218,7 @@ export default {
 		} else if (request.method == "OPTIONS") {
 			return new Response("", {
 				status: 204,
-				headers: {
-					"Access-Control-Allow-Origin": "*",
-					"Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-					"Access-Control-Allow-Headers": "Content-Type",
-					"Access-Control-Max-Age": 7200
-				}
+				headers: corsHeaders
 			})
 		} else return new Response("Unsupported method", { status: 405 })
 	}

@@ -40,6 +40,7 @@ const global = {
 
 	renderImage: "readonly",
 	turnstile: "readonly",
+	qrcode: "readonly",
 	Chart: "readonly"
 }
 
@@ -254,7 +255,7 @@ module.exports = [
 			globals: global
 		},
 		files: ["**/*.js"],
-		ignores: ["!*.js"],
+		ignores: ["!*.js", "src/assets/qrcode.min.js"],
 		plugins: {
 			unicorn,
 			sonarjs,
@@ -266,7 +267,8 @@ module.exports = [
 		languageOptions: {
 			globals: {
 				...global,
-				...globals.node
+				...globals.node,
+				...globals.worker
 			}
 		},
 		files: ["*.js"],
