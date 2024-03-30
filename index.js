@@ -2,6 +2,9 @@ import { getAssetFromKV } from "@cloudflare/kv-asset-handler"
 import manifestJSON from "__STATIC_CONTENT_MANIFEST"
 const assetManifest = JSON.parse(manifestJSON)
 
+import { Buffer } from "node:buffer"
+import qrCode from "./src/assets/qrcode.min.js"
+
 const urlsESLint = {
 	angular: "https://github.com/EmmanuelDemey/eslint-plugin-angular/blob/master/docs/rules/{RULE}.md",
 	ava: "https://github.com/avajs/eslint-plugin-ava/blob/main/docs/rules/{RULE}.md",
@@ -93,7 +96,7 @@ const blacklistedUsernames = new Set([
 	"no-reply"
 ])
 
-const discordEmbed =
+const socialEmbed =
 	"<meta property='og:title' content='Short-URL'>" +
 	"<meta property='og:type' name='og:type' content='shorter'>" +
 	"<meta property='og:image' content='https://sh0rt.zip/assets/screen.webp'>" +
@@ -104,7 +107,7 @@ export default {
 	async fetch(request, env, ctx) {
 		let path = decodeURI((new URL(request.url)).pathname)
 		if (request.method == "GET") {
-			if (path == "/" || path == "/index.html" || path == "/favicon.ico" || path.startsWith("/assets/")) return await getAssetFromKV(
+			if (path == "/" || path == "/index.html" || path == "/favicon.ico" || path == "/serviceworker.js" || path == "/robots.txt" || path.startsWith("/assets/")) return await getAssetFromKV(
 				{
 					request,
 					waitUntil: ctx.waitUntil.bind(ctx)
@@ -118,6 +121,9 @@ export default {
 			if (path.startsWith("/api/")) {
 				target = "api"
 				path = path.replace("/api", "")
+			} else if (path.startsWith("/qr/")) {
+				target = "qr"
+				path = path.replace("/qr", "")
 			} else if (request.headers.get("User-Agent").includes("Discordbot")) target = "embed"
 
 			const isESLint = path.split("/").length > 1 && urlsESLint[path.split("/")[1].toLowerCase()]
@@ -125,7 +131,7 @@ export default {
 				: await env.SHORTER_URLS.get(path.split("/")[1].toLowerCase())
 
 			if (!url && target == "embed")
-				return new Response(discordEmbed + "<meta property='og:url' content='https://sh0rt.zip'><meta property='og:description' content='Unknown Short-URL'><meta name='theme-color' content='#FF0000'>", {
+				return new Response(socialEmbed + "<meta property='og:url' content='https://sh0rt.zip'><meta property='og:description' content='Unknown Short-URL'><meta name='theme-color' content='#FF0000'>", {
 					headers: {
 						"Content-Type": "text/html"
 					}
@@ -145,7 +151,28 @@ export default {
 					...corsHeaders
 				}
 			})
-			return new Response(discordEmbed + "<meta property='og:description' content='" + redirect + "'><meta name='theme-color' content='#33FF33'>", {
+			if (target == "qr") {
+				const qr = qrCode(4, "L")
+				qr.addData("https://sh0rt.zip/" + path.split("/")[1].toLowerCase())
+				qr.make()
+				const decodedData = Buffer.from(qr.createDataURL(4, 0).split(",")[1], "base64")
+
+				// Overwrite the Content-Length header because Cloudflare somehow messes it up
+				// eslint-disable-next-line no-undef
+				const { writable, readable } = new FixedLengthStream(decodedData.length)
+				const writer = writable.getWriter()
+
+				writer.write(decodedData)
+				writer.close()
+
+				return new Response(readable, {
+					headers: {
+						"Content-Type": "image/gif",
+						...corsHeaders
+					}
+				})
+			}
+			return new Response(socialEmbed + "<meta property='og:description' content='" + redirect + "'><meta name='theme-color' content='#33FF33'>", {
 				headers: {
 					"Content-Type": "text/html"
 				}

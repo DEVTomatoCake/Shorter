@@ -34,7 +34,7 @@ Angemeldete Nutzer:
 	- Tags hinzufügen und danach filtern können
 	- Kommentare pro URL
 	- Massenbearbeitung
-	- Linkvorschau direkt oder Link zu dc-devportal https://discord.com/developers/embeds?url=https%253A%252F%252Ftomatenkuchen.com
+	- Linkvorschau direkt oder Link zu dc-devportal https://discord.com/developers/embeds?url=https%253A%252F%252Fsh0rt.zip
 - API-Key
 - Teams
 	- Erstellen
@@ -47,7 +47,6 @@ Angemeldete Nutzer:
 	- Black- bzw. Whitelist für Domains, für die Shortlinks erstellt werden dürfen
 
 - Wenn Link nicht gefunden custom HTMLseite mit link zu startseite
-- /qr/ Add to short URLs to display the shorturl's QR code.
 - /report zum Melden von Links
 - cf Turnstile im hintergrund?
 - Teilendialogpopup
@@ -59,6 +58,6 @@ Angemeldete Nutzer:
 - Broken Link Report: benachrichtigung, sobald ein link nicht mehr funktioniert
 - HTML/JS/CSS Minify
 - Shortcuts für Linkerstellung (Tastenkombination, Unterstützung für Strg + V überall zum Öffnen eines Popups)
-- Link Cloaking: Maskierung der Ziel-URL mit dem Shortlink als iframe
-	- Automatische Weiterleitung, wenn die Ziel-URL nicht geladen werden kann oder das über CSP deaktiviert hat
 - Device targeting: Pro Gerätetyp (Android, iOS, ...) eine individuelle Ziel-URL, z. B. für Appstore-Links. Wenn nicht sicher oder fehlt wird die Standard-URL verwendet.
+- Backup für Cloudflare-KV
+	- Langfristig andere DB

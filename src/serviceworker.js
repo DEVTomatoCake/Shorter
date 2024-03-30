@@ -10,8 +10,9 @@ self.addEventListener("install", event => {
 
 		const staticCache = await caches.open("static" + version)
 		staticCache.addAll([
-			"/assets/discord.svg",
-			"/assets/github.svg"
+			"/assets/document-text-outline.svg",
+			"/assets/discord.webp",
+			"/assets/github.webp"
 		])
 
 		const fallbackCache = await caches.open("fallback" + version)
@@ -20,7 +21,7 @@ self.addEventListener("install", event => {
 			"/assets/script.js",
 
 			"/",
-			"/manifest.json"
+			"/assets/manifest.json"
 		])
 	})())
 })
