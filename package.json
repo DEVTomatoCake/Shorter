@@ -16,7 +16,7 @@
     "clean-css": "^5.3.3",
     "eslint": "^8.57.0",
     "eslint-plugin-html": "^8.0.0",
-    "eslint-plugin-sonarjs": "^0.24.0",
+    "eslint-plugin-sonarjs": "^0.25.0",
     "eslint-plugin-unicorn": "^51.0.1",
     "uglify-js": "^3.17.4"
   }
