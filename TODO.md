@@ -55,8 +55,6 @@ Angemeldete Nutzer:
 - zufällige wörter statt zeichen als option
 	- länge der zeichen und characterset festlegen können: a-z A-Z 0-9 zerowidthzeichen tiernamen objektnamen emojis usw.
 	- https://github.com/ozh/yourls-word-based-short-urls/raw/master/nouns.txt https://github.com/cfultz/Fancy-Animal-Short-Urls/raw/main/adjectives.txt https://github.com/cfultz/Fancy-Animal-Short-Urls/raw/main/colors.txt https://github.com/cfultz/Fancy-Animal-Short-Urls/raw/main/animals.txt
-- Broken Link Report: benachrichtigung, sobald ein link nicht mehr funktioniert
-- HTML/JS/CSS Minify
 - Shortcuts für Linkerstellung (Tastenkombination, Unterstützung für Strg + V überall zum Öffnen eines Popups)
 - Device targeting: Pro Gerätetyp (Android, iOS, ...) eine individuelle Ziel-URL, z. B. für Appstore-Links. Wenn nicht sicher oder fehlt wird die Standard-URL verwendet.
 - Backup für Cloudflare-KV

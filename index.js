@@ -182,7 +182,7 @@ export default {
 			try {
 				const parsed = JSON.parse(body)
 				if (!parsed.url) return new Response(JSON.stringify({error: "missingurlbody"}), {
-					status: 422,
+					status: 400,
 					headers: {
 						"Content-Type": "application/json",
 						...corsHeaders
@@ -210,7 +210,7 @@ export default {
 					})
 
 					if (blacklistedPaths.has(name.split("/")[0].trim().toLowerCase())) return new Response(JSON.stringify({error: "name_blacklisted"}), {
-						status: 403,
+						status: 422,
 						headers: {
 							"Content-Type": "application/json",
 							...corsHeaders

@@ -1,3 +1,5 @@
+const documentCopy = document
+
 const langDE = {
 	optionsVal: {
 		"15m": "15 Minuten",
@@ -12,6 +14,7 @@ const langDE = {
 		"3mo": "3 Monate",
 		"6mo": "6 Monate",
 		"1y": "1 Jahr",
+		"3y": "3 Jahre",
 		custom: "Benutzerdefiniert"
 	},
 	response: "Warte auf Eingabe...",
@@ -36,6 +39,7 @@ const langEN = {
 		"3mo": "3 Months",
 		"6mo": "6 Months",
 		"1y": "1 Year",
+		"3y": "3 Years",
 		custom: "Custom"
 	},
 	response: "Waiting for input...",
@@ -56,20 +60,34 @@ const setLang = () => {
 	const lang = getLang()
 
 	let optionHTML = ""
-	const currentSelect = document.getElementById("date").value
+	const currentSelect = documentCopy.getElementById("date").value
 	for (const [key, value] of Object.entries(lang.optionsVal)) {
 		optionHTML += "<option value='" + key + "'" + (key == currentSelect ? " selected" : "") + ">" + value + "</option>"
 	}
-	document.getElementById("date").innerHTML = optionHTML
+	documentCopy.getElementById("date").innerHTML = optionHTML
 
-	document.getElementById("response").innerHTML = lang.response
-	document.getElementById("header-text").innerHTML = lang["header-text"]
-	document.getElementById("target-uri").innerHTML = lang["target-uri"]
-	document.getElementById("short-name-label").innerHTML = lang["short-name-label"]
-	document.getElementById("lang3").innerHTML = lang.lang3
-	document.getElementById("submit").innerHTML = lang.submit
-	document.getElementById("langswitch").innerHTML = lang.langswitch
-	document.getElementsByTagName("title")[0].innerText = lang["header-text"]
+	documentCopy.getElementById("response").innerHTML = lang.response
+	documentCopy.getElementById("header-text").innerHTML = lang["header-text"]
+	documentCopy.getElementById("target-uri").innerHTML = lang["target-uri"]
+	documentCopy.getElementById("short-name-label").innerHTML = lang["short-name-label"]
+	documentCopy.getElementById("lang3").innerHTML = lang.lang3
+	documentCopy.getElementById("submit").innerHTML = lang.submit
+	documentCopy.getElementById("langswitch").innerHTML = lang.langswitch
+	documentCopy.getElementsByTagName("title")[0].innerText = lang["header-text"]
+}
+
+const update = () => {
+	const select = documentCopy.getElementById("date")
+	switch (select.options[select.selectedIndex].value) {
+		case "custom":
+			documentCopy.getElementById("date-custom-container").removeAttribute("hidden")
+			const dateElem = documentCopy.getElementById("date-custom")
+			dateElem.min = dateAdd(new Date(), "minute", 2).toISOString().substring(0, 16)
+			dateElem.value = dateAdd(new Date(), "minute", 2).toISOString().substring(0, 16)
+			break
+		default:
+			documentCopy.getElementById("date-custom-container").setAttribute("hidden", "")
+	}
 }
 
 const changeLang = () => {
@@ -85,37 +103,45 @@ function setup() {
 	localStorage.setItem("lang", "en")
 	if (userLang && userLang.split("-")[0] != "en") changeLang()
 
-	document.getElementById("createForm").addEventListener("submit", e => {
+	documentCopy.getElementById("createForm").addEventListener("submit", e => {
 		e.preventDefault()
 		createURL()
 	})
 
-	document.getElementById("langswitch").addEventListener("click", changeLang)
-	document.getElementById("date").addEventListener("change", update)
+	documentCopy.getElementById("langswitch").addEventListener("click", changeLang)
+	documentCopy.getElementById("date").addEventListener("change", update)
 
 	if ("serviceWorker" in navigator) navigator.serviceWorker.register("/serviceworker.js")
 }
-document.addEventListener("DOMContentLoaded", setup)
+documentCopy.addEventListener("DOMContentLoaded", setup)
 
 const getDate = () => {
-	const select = document.getElementById("date")
+	const select = documentCopy.getElementById("date")
 	const option = select.options[select.selectedIndex]
 
-	if (option.value == "custom") return document.getElementById("date-custom").value
+	if (option.value == "custom") return documentCopy.getElementById("date-custom").value
 	return toDate().toISOString().substring(0, 16)
 }
 
+const copy = () =>
+	navigator.clipboard.writeText(documentCopy.getElementById("resulturl").href).catch(err => {
+		if (localStorage.getItem("lang") == "de") alert("Link konnte nicht kopiert werden")
+		else alert("Link could not be copied")
+		console.error("Link could not be copied", err)
+	})
+
 async function createURL() {
-	const shorturl = document.getElementById("url").value
-	const name = document.getElementById("name").value
-	const date = getDate()
+	const shorturl = documentCopy.getElementById("url").value
+	const name = documentCopy.getElementById("name").value
+
+	const response = documentCopy.getElementById("response")
 	if (!shorturl) {
-		if (localStorage.getItem("lang") == "de") return document.getElementById("response").innerHTML = "Bitte gib eine URL an!"
-		else return document.getElementById("response").innerHTML = "Please enter a URL!"
+		if (localStorage.getItem("lang") == "de") return response.innerHTML = "Bitte gib eine URL an!"
+		else return response.innerHTML = "Please enter a URL!"
 	}
 	if (!shorturl.startsWith("https://") && !shorturl.startsWith("http://")) {
-		if (localStorage.getItem("lang") == "de") return document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an!"
-		else return document.getElementById("response").innerHTML = "Please enter a valid URL!"
+		if (localStorage.getItem("lang") == "de") return response.innerHTML = "Bitte gib eine gültige URL an!"
+		else return response.innerHTML = "Please enter a valid URL!"
 	}
 
 	const res = await fetch(location.protocol == "https:" ? location.origin : "https://sh0rt.zip", {
@@ -124,76 +150,56 @@ async function createURL() {
 			"Content-Type": "application/json",
 			Accept: "application/json"
 		},
-		body: JSON.stringify({url: shorturl, name, date})
+		body: JSON.stringify({
+			url: shorturl,
+			name,
+			date: getDate()
+		})
 	})
 	const json = await res.json()
-
 	console.log("Response received", json)
+
 	if (json.name) {
 		const url = (location.protocol == "https:" ? location.origin : "https://sh0rt.zip") + "/" + json.name
 
-		if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML =
-			"Der Link wurde erfolgreich unter <a href='" + url + "' id='resulturl'>" + url + "</a> erstellt<br><button onclick='copy()'>Kopieren</button>"
-		else document.getElementById("response").innerHTML =
-			"The link was successfully created at <a href='" + url + "' id='resulturl'>" + url + "</a><br><button onclick='copy()'>Copy</button>"
+		if (localStorage.getItem("lang") == "de") response.innerHTML =
+			"Der Link wurde erfolgreich unter <a href='" + url + "' id='resulturl'>" + url + "</a> erstellt<br><button id='copy-button'>Kopieren</button>"
+		else response.innerHTML =
+			"The link was successfully created at <a href='" + url + "' id='resulturl'>" + url + "</a><br><button id='copy-button'>Copy</button>"
+		documentCopy.getElementById("copy-button").addEventListener("click", copy)
 
 		const qr = qrcode(4, "L")
 		qr.addData(url)
 		qr.make()
-		document.getElementById("qrimage-container").innerHTML = qr.createImgTag(7, 10, "QR code generated for the short URL")
+		documentCopy.getElementById("qrimage-container").innerHTML = qr.createImgTag(7, 10, "QR code generated for the short URL")
 
 		try {
 			navigator.clipboard.writeText(url)
-		} catch (err) {
-			console.error("Link could not be copied to clipboard automatically", err)
+		} catch (e) {
+			console.error("Link could not be copied to clipboard automatically", e)
 		}
 	} else {
 		switch (json.error) {
 			case "missingurlbody":
-				if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine URL an"
-				else document.getElementById("response").innerHTML = "Please enter a URL"
+				if (localStorage.getItem("lang") == "de") response.innerHTML = "Bitte gib eine URL an"
+				else response.innerHTML = "Please enter a URL"
 				break
 			case "url_invalid":
-				if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Bitte gib eine gültige URL an"
-				else document.getElementById("response").innerHTML = "Please enter a valid URL"
+				if (localStorage.getItem("lang") == "de") response.innerHTML = "Bitte gib eine gültige URL an"
+				else response.innerHTML = "Please enter a valid URL"
 				break
 			case "name_blacklisted":
-				if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Dieser Short-Name ist nicht erlaubt"
-				else document.getElementById("response").innerHTML = "This short name is not allowed"
+				if (localStorage.getItem("lang") == "de") response.innerHTML = "Dieser Short-Name ist nicht erlaubt"
+				else response.innerHTML = "This short name is not allowed"
 				break
 			case "name_alreadyexists":
-				if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Der Name ist bereits vergeben"
-				else document.getElementById("response").innerHTML = "The name is already taken"
+				if (localStorage.getItem("lang") == "de") response.innerHTML = "Der Name ist bereits vergeben"
+				else response.innerHTML = "The name is already taken"
 				break
 			default:
-				if (localStorage.getItem("lang") == "de") document.getElementById("response").innerHTML = "Ein unbekannter Fehler ist aufgetreten: " + json.error
-				else document.getElementById("response").innerHTML = "An unknown error occurred: " + json.error
+				if (localStorage.getItem("lang") == "de") response.innerHTML = "Ein unbekannter Fehler ist aufgetreten: " + json.error
+				else response.innerHTML = "An unknown error occurred: " + json.error
 		}
-	}
-}
-
-function copy() {
-	navigator.clipboard.writeText(document.getElementById("resulturl").href).catch(err => {
-		if (localStorage.getItem("lang") == "de") alert("Link konnte nicht kopiert werden")
-		else alert("Link could not be copied")
-		console.error("Link could not be copied", err)
-	})
-}
-
-function update() {
-	const select = document.getElementById("date")
-	const option = select.options[select.selectedIndex]
-
-	switch (option.value) {
-		case "custom":
-			document.getElementById("date-custom-container").removeAttribute("hidden")
-			const dateElem = document.getElementById("date-custom")
-			dateElem.min = dateAdd(new Date(), "minute", 2).toISOString().substring(0, 16)
-			dateElem.value = dateAdd(new Date(), "minute", 2).toISOString().substring(0, 16)
-			break
-		default:
-			document.getElementById("date-custom-container").setAttribute("hidden", "")
-			break
 	}
 }
 
@@ -224,10 +230,10 @@ function dateAdd(date, interval, units) {
 			ret.setDate(ret.getDate() + units)
 			break
 		case "hour":
-			ret.setTime(ret.getTime() + units * 3600000)
+			ret.setTime(ret.getTime() + units * 1000 * 60 * 60)
 			break
 		case "minute":
-			ret.setTime(ret.getTime() + units * 60000)
+			ret.setTime(ret.getTime() + units * 1000 * 60)
 			break
 		case "second":
 			ret.setTime(ret.getTime() + units * 1000)
@@ -239,19 +245,20 @@ function dateAdd(date, interval, units) {
 }
 
 function toDate() {
-	const select = document.getElementById("date")
-	const option = select.options[select.selectedIndex]
+	const select = documentCopy.getElementById("date")
+	const option = select.options[select.selectedIndex].value
 	const date = new Date()
 
-	if (option.value == "15m") return dateAdd(date, "minute", 15)
-	if (option.value == "1h") return dateAdd(date , "hour", 1)
-	if (option.value == "8h") return dateAdd(date, "hour", 8)
-	if (option.value == "1d") return dateAdd(date, "day", 1)
-	if (option.value == "3d") return dateAdd(date, "day", 3)
-	if (option.value == "1w") return dateAdd(date, "week", 1)
-	if (option.value == "2w") return dateAdd(date, "week", 2)
-	if (option.value == "1mo") return dateAdd(date, "month", 1)
-	if (option.value == "3mo") return dateAdd(date, "month", 3)
-	if (option.value == "6mo") return dateAdd(date, "month", 6)
-	if (option.value == "1y") return dateAdd(date, "year", 1)
+	if (option == "15m") return dateAdd(date, "minute", 15)
+	if (option == "1h") return dateAdd(date , "hour", 1)
+	if (option == "8h") return dateAdd(date, "hour", 8)
+	if (option == "1d") return dateAdd(date, "day", 1)
+	if (option == "3d") return dateAdd(date, "day", 3)
+	if (option == "1w") return dateAdd(date, "week", 1)
+	if (option == "2w") return dateAdd(date, "week", 2)
+	if (option == "1mo") return dateAdd(date, "month", 1)
+	if (option == "3mo") return dateAdd(date, "month", 3)
+	if (option == "6mo") return dateAdd(date, "month", 6)
+	if (option == "1y") return dateAdd(date, "year", 1)
+	if (option == "3y") return dateAdd(date, "year", 3)
 }

@@ -9,7 +9,7 @@
 	],
 	"info": {
 		"description": "This API lets you create short URLs and get information about them.",
-		"version": "1.3.0",
+		"version": "1.4.0",
 		"title": "Short URL API",
 		"contact": {
 			"url": "https://discord.gg/ZqzFUC8qe9"
@@ -258,6 +258,27 @@
 							}
 						}
 					},
+					"400": {
+						"description": "Invalid input which prevents the short URL from being created, in this case a missing url.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"error"
+									],
+									"properties": {
+										"error": {
+											"type": "string",
+											"enum": [
+												"missingurlbody"
+											]
+										}
+									}
+								}
+							}
+						}
+					},
 					"409": {
 						"description": "There is already a short URL with that name.",
 						"content": {
@@ -292,8 +313,8 @@
 										"error": {
 											"type": "string",
 											"enum": [
-												"missingurlbody",
-												"url_invalid"
+												"url_invalid",
+												"name_blacklisted"
 											]
 										}
 									}
