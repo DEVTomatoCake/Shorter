@@ -240,8 +240,9 @@ export default {
 						...corsHeaders
 					}
 				})
-			} catch (err) {
-				return new Response("Received invalid JSON, or another error occured: " + err, { status: 400 })
+			} catch (e) {
+				console.error(e, body)
+				return new Response("Received invalid JSON, or another error occured: " + e, { status: 400 })
 			}
 		} else if (request.method == "OPTIONS") {
 			return new Response("", {

@@ -21,7 +21,7 @@
     "deploy": "node build.js && wrangler deploy"
   },
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.3.1"
+    "@cloudflare/kv-asset-handler": "^0.3.2"
   },
   "devDependencies": {
     "@html-eslint/eslint-plugin": "^0.24.1",
@@ -29,7 +29,7 @@
     "@stylistic/eslint-plugin-js": "^1.7.2",
     "clean-css": "^5.3.3",
     "eslint": "^8.57.0",
-    "eslint-plugin-html": "^8.1.0",
+    "eslint-plugin-html": "^8.1.1",
     "eslint-plugin-sonarjs": "^0.25.1",
     "eslint-plugin-unicorn": "^52.0.0",
     "uglify-js": "^3.17.4"
