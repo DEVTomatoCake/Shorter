@@ -6,18 +6,15 @@ partly in German because the devs are German, deal with it
 - Login mit WebAuthn/FIDO2, entweder eigenes Backend oder mit Bitwarden Passwordless
 
 Angemeldete Nutzer:
+- Erstellen
 - Löschen
 	- Mehrfachauswahl
-- Erstellen
 - Import & Export in
 	- JSON
-	- XML
 	- CSV
 - Suche
-- Filter nach alle mit zugriff/selbst erstellt/bestimmtes team
 - Bearbeiten der Links
 	- Ziel-URI
-	- UTM-Header senden?
 	- UTM-Header für Shortlink erstellen
 		- Referral (ref): The website that is sending traffic to your link
 		- UTM Source (utm_source): The source of your traffic (e.g. Facebook, Twitter, etc.)
@@ -49,7 +46,6 @@ Angemeldete Nutzer:
 - Wenn Link nicht gefunden custom HTMLseite mit link zu startseite
 - /report zum Melden von Links
 - cf Turnstile im hintergrund?
-- Teilendialogpopup
 - Kleine Dateien teilen
 - If a submitted URL is a redirect, the final destination is stored to avoid nested redirects
 - zufällige wörter statt zeichen als option

@@ -11,7 +11,6 @@ const linterOptions = {
 }
 const global = {
 	...globals.browser,
-	...globals.worker,
 
 	encode: "writable",
 	assertInt: "writable",
@@ -270,7 +269,9 @@ module.exports = [
 			globals: {
 				...global,
 				...globals.node,
-				...globals.worker
+				...globals.worker,
+
+				FixedLengthStream: "readonly"
 			}
 		},
 		files: ["*.js"],

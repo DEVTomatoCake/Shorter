@@ -39,6 +39,12 @@ h1 {
 	margin: 50px;
 }
 
+#result-button-container {
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+}
+
 #response, legend {
 	color: #fff;
 	margin: 10px;

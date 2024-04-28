@@ -34,10 +34,10 @@
 					</label>
 					<input id="url" type="url" name="shorturl" required>
 
-					<label for="name" id="short-name-label">Short name:</label>
+					<label for="name" id="shortName">Short name:</label>
 					<input id="name" type="text" name="shortname">
 
-					<label for="date" id="lang3">
+					<label for="date" id="expiryDate">
 						Expiration date<span>*</span>:
 					</label>
 					<div>
@@ -71,7 +71,15 @@
 			<fieldset>
 				<legend>Status:</legend>
 				<p id="response">Waiting for input...</p>
-				<div id="qrimage-container"></div>
+
+				<div id="result-container" hidden>
+					<div id="result-button-container">
+						<button type="button" id="copyButton">Copy</button>
+						<button type="button" id="shareButton" hidden>Share</button>
+					</div>
+
+					<div id="qrimage-container"></div>
+				</div>
 			</fieldset>
 		</main>
 		<footer>

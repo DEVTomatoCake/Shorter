@@ -63,6 +63,8 @@ const blacklistedPaths = new Set([
 	"assets",
 	"robots.txt",
 	"favicon.ico",
+	"serviceworker.js",
+	"serviceworker.js.map",
 	".well-known",
 	"about",
 	"info",
@@ -158,7 +160,6 @@ export default {
 				const decodedData = Buffer.from(qr.createDataURL(4, 0).split(",")[1], "base64")
 
 				// Overwrite the Content-Length header because Cloudflare somehow messes it up
-				// eslint-disable-next-line no-undef
 				const { writable, readable } = new FixedLengthStream(decodedData.length)
 				const writer = writable.getWriter()
 
