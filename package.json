@@ -10,7 +10,10 @@
     "type": "git",
     "url": "https://github.com/DEVTomatoCake/Shorter"
   },
-  "author": "TomatoCake",
+  "author": {
+    "name": "TomatoCake",
+    "url": "https://github.com/DEVTomatoCake"
+  },
   "contributors": [
     {
       "name": "BLACK",
