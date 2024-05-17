@@ -19,9 +19,9 @@ const langDE = {
 	},
 	response: "Warte auf Eingabe...",
 	"header-text": "Short-URL erstellen",
-	"target-uri": "Ziel-URI:<span>*</span>:",
+	"target-uri": "Ziel<span>*</span>:",
 	shortName: "Short-Name:",
-	expiryDate: "Ablaufdatum<span>*</span>:",
+	expiryDate: "Ablaufdatum:",
 	submit: "Erstellen",
 	copyButton: "Kopieren",
 	shareButton: "Teilen",
@@ -46,9 +46,9 @@ const langEN = {
 	},
 	response: "Waiting for input...",
 	"header-text": "Create a short URL",
-	"target-uri": "Target URI:<span>*</span>:",
+	"target-uri": "Target<span>*</span>:",
 	shortName: "Short name:",
-	expiryDate: "Expiration date<span>*</span>:",
+	expiryDate: "Expiration date:",
 	submit: "Create",
 	copyButton: "Copy",
 	shareButton: "Share",
@@ -180,16 +180,45 @@ const copy = () =>
 let lastUri = ""
 const createURL = async () => {
 	const shorturl = documentCopy.getElementById("url").value
+	const files = documentCopy.getElementById("file-upload").files
 	const name = documentCopy.getElementById("name").value
 
 	const response = documentCopy.getElementById("response")
-	if (!shorturl) {
-		if (localStorage.getItem("lang") == "de") return response.innerHTML = "Bitte gib eine URL an!"
-		else return response.innerHTML = "Please enter a URL!"
+	if (!shorturl.trim() && files.length == 0) {
+		if (localStorage.getItem("lang") == "de") return response.innerHTML = "Bitte gib eine URL an oder wähle eine Datei aus!"
+		else return response.innerHTML = "Please enter a URL or select a file!"
 	}
-	if (!shorturl.startsWith("https://") && !shorturl.startsWith("http://")) {
+	if ((!shorturl.startsWith("https://") && !shorturl.startsWith("http://")) && files.length == 0) {
 		if (localStorage.getItem("lang") == "de") return response.innerHTML = "Bitte gib eine gültige URL an!"
 		else return response.innerHTML = "Please enter a valid URL!"
+	}
+
+	const data = {
+		name,
+		date: getDate()
+	}
+	if (shorturl) data.url = shorturl.trim()
+
+	if (files.length > 0) {
+		const filesArray = [...files]
+		if (filesArray.some(file => file.size > 1024 * 1024 * 5)) {
+			if (localStorage.getItem("lang") == "de") return response.innerHTML = "Eine Datei darf maximal 5 MiB groß sein!"
+			else return response.innerHTML = "A file must be a maximum of 5 MiB in size!"
+		}
+		if (filesArray.reduce((acc, file) => acc + file.size, 0) > 1024 * 1024 * 15) {
+			if (localStorage.getItem("lang") == "de") return response.innerHTML = "Die Dateien dürfen zusammen maximal 15 MiB groß sein!"
+			else return response.innerHTML = "The files together must be a maximum of 15 MiB in size!"
+		}
+
+		data.files = []
+		for await (const file of files) {
+			const blob = await file.arrayBuffer()
+			const base64 = btoa(new Uint8Array(blob).reduce((acc, byte) => acc + String.fromCharCode(byte), ""))
+			data.files.push({
+				name: file.name,
+				content: "data:" + file.type + ";base64," + base64
+			})
+		}
 	}
 
 	const res = await fetch(location.protocol == "https:" ? location.origin : "https://sh0rt.zip", {
@@ -198,40 +227,44 @@ const createURL = async () => {
 			"Content-Type": "application/json",
 			Accept: "application/json"
 		},
-		body: JSON.stringify({
-			url: shorturl,
-			name,
-			date: getDate()
-		})
+		body: JSON.stringify(data)
 	})
 	const json = await res.json()
 	console.log("Response received", json)
 
 	if (json.name) {
-		lastUri = (location.protocol == "https:" ? location.origin : "https://sh0rt.zip") + "/" + json.name
+		const uris = json.files ? json.files.map(file => (location.protocol == "https:" ? location.origin : "https://sh0rt.zip") + "/file/" + json.name + "/" + file.name) : []
+		if (json.uri) uris.push((location.protocol == "https:" ? location.origin : "https://sh0rt.zip") + "/" + json.name)
+		lastUri = uris.at(-1)
 
 		let resultHTML = ""
-		if (localStorage.getItem("lang") == "de") resultHTML =
-			"Der Link wurde erfolgreich unter <a href='" + lastUri + "' id='resulturl'>" + lastUri + "</a> erstellt"
-		else resultHTML =
-			"The link was successfully created at <a href='" + lastUri + "' id='resulturl'>" + lastUri + "</a>"
+		let i = 0
+		for await (const uri of uris) {
+			if (localStorage.getItem("lang") == "de") resultHTML +=
+				"<br>Der Link wurde erfolgreich unter <a href='" + uri + "' id='resulturl'>" + uri + "</a> erstellt"
+			else resultHTML +=
+				"<br>The link was successfully created at <a href='" + uri + "' id='resulturl'>" + uri + "</a>"
 
-		try {
-			await navigator.clipboard.writeText(lastUri)
+			if (i++ == uris.length - 1) {
+				try {
+					await navigator.clipboard.writeText(lastUri)
 
-			if (localStorage.getItem("lang") == "de") resultHTML += "<br>und automatisch in die Zwischenablage kopiert"
-			else resultHTML += "<br>and automatically copied to the clipboard"
-		} catch (e) {
-			console.error("Link could not be copied to clipboard automatically", e)
+					if (localStorage.getItem("lang") == "de") resultHTML += "<br>und automatisch in die Zwischenablage kopiert"
+					else resultHTML += "<br>and automatically copied to the clipboard"
+				} catch (e) {
+					console.error("Link could not be copied to clipboard automatically", e)
+				}
+			}
+			resultHTML += "!<br>"
+
+			documentCopy.getElementById("result-container").removeAttribute("hidden")
+
+			const qr = qrcode(4, "L")
+			qr.addData(uri)
+			qr.make()
+			resultHTML += qr.createImgTag(7, 10, "QR code generated for the short URL") + "<br>"
 		}
-
-		response.innerHTML = resultHTML + "!"
-		documentCopy.getElementById("result-container").removeAttribute("hidden")
-
-		const qr = qrcode(4, "L")
-		qr.addData(lastUri)
-		qr.make()
-		documentCopy.getElementById("qrimage-container").innerHTML = qr.createImgTag(7, 10, "QR code generated for the short URL")
+		response.innerHTML = resultHTML
 	} else {
 		switch (json.error) {
 			case "missingurlbody":
@@ -241,6 +274,10 @@ const createURL = async () => {
 			case "url_invalid":
 				if (localStorage.getItem("lang") == "de") response.innerHTML = "Bitte gib eine gültige URL an"
 				else response.innerHTML = "Please enter a valid URL"
+				break
+			case "name_invalid":
+				if (localStorage.getItem("lang") == "de") response.innerHTML = "Bitte gib einen gültigen Namen an"
+				else response.innerHTML = "Please enter a valid name"
 				break
 			case "name_blacklisted":
 				if (localStorage.getItem("lang") == "de") response.innerHTML = "Dieser Short-Name ist nicht erlaubt"
@@ -271,6 +308,11 @@ documentCopy.addEventListener("DOMContentLoaded", () => {
 	documentCopy.getElementById("date").addEventListener("change", update)
 	documentCopy.getElementById("copyButton").addEventListener("click", copy)
 
+	documentCopy.getElementById("file-upload").addEventListener("change", e => {
+		if (e.target.files.length > 0) documentCopy.getElementById("url").removeAttribute("required")
+		else documentCopy.getElementById("url").setAttribute("required", "")
+	})
+
 	if ("share" in navigator) {
 		documentCopy.getElementById("shareButton").removeAttribute("hidden")
 		documentCopy.getElementById("shareButton").addEventListener("click", () => {
@@ -281,5 +323,5 @@ documentCopy.addEventListener("DOMContentLoaded", () => {
 		})
 	}
 
-	if ("serviceWorker" in navigator) navigator.serviceWorker.register("/serviceworker.js")
+	if (location.protocol == "https:" && "serviceWorker" in navigator) navigator.serviceWorker.register("/serviceworker.js")
 })

@@ -4,15 +4,22 @@
 body {
 	background: linear-gradient(90deg, #2a0b72, #17466F);
 }
+
 button, input {
+	color: #fcfafa;
+	padding: 2px;
+}
+button, input:not([type=file]) {
 	border-radius: 5px;
 	margin: 7px 0;
 	background: #0b487e;
-	padding: 2px;
 	box-shadow: 0 0 10px #0077ff;
-	font-size: 130%;
-	color:rgb(252, 250, 250);
+	font-size: 21px;
 	border: 1px solid #fff;
+}
+button:disabled, input:disabled {
+	opacity: .5;
+	cursor: not-allowed;
 }
 
 button {
@@ -28,7 +35,7 @@ main {
 }
 
 label {
-	font-size: 130%;
+	font-size: 21px;
 	color: #fff;
 	margin: 10px;
 }
@@ -37,6 +44,10 @@ h1 {
 	font-size: 200%;
 	color: #fff;
 	margin: 50px;
+}
+
+a {
+	color: #80a1fd;
 }
 
 #result-button-container {
@@ -105,9 +116,15 @@ button:active {
 
 footer {
 	display: flex;
+	align-items: center;
+	flex-direction: column;
+	gap: 10px;
+	margin: 15px 0 30px;
+}
+footer div {
+	display: flex;
 	justify-content: center;
 	color: #fff;
-	margin: 15px 0 30px;
 	gap: 10px;
 }
 footer img:hover {

@@ -5,6 +5,10 @@ const assetManifest = JSON.parse(manifestJSON)
 import { Buffer } from "node:buffer"
 import qrCode from "./src/assets/qrcode.min.js"
 
+const optionsKV = {
+	cacheTtl: 60 * 2.5
+}
+
 const urlsESLint = {
 	angular: "https://github.com/EmmanuelDemey/eslint-plugin-angular/blob/master/docs/rules/{RULE}.md",
 	ava: "https://github.com/avajs/eslint-plugin-ava/blob/main/docs/rules/{RULE}.md",
@@ -55,17 +59,32 @@ const corsHeaders = {
 	"Access-Control-Allow-Headers": "Content-Type",
 	"Access-Control-Max-Age": 7200
 }
+const corsJSONHeaders = {
+	"Content-Type": "application/json",
+	...corsHeaders
+}
+
+const storageDuration = size => {
+	if (size > 1024 * 1024 * 3) return 60 * 60 * 24 * 2
+	if (size > 1024 * 1024) return 60 * 60 * 24 * 7
+	if (size > 1024 * 256) return 60 * 60 * 24 * 14
+	return 60 * 60 * 24 * 30
+}
 
 const blacklistedPaths = new Set([
 	"api",
 	"qr",
+	"file",
 	"report",
 	"assets",
+	"index.html",
 	"robots.txt",
 	"favicon.ico",
 	"serviceworker.js",
 	"serviceworker.js.map",
 	".well-known",
+	".", // https://developers.cloudflare.com/kv/api/write-key-value-pairs/#:~:text=have%20a,or%20..
+	"..",
 	"about",
 	"info",
 	"localhost",
@@ -130,7 +149,11 @@ export default {
 
 			const isESLint = path.split("/").length > 1 && urlsESLint[path.split("/")[1].toLowerCase()]
 			const url = isESLint ? urlsESLint[path.split("/")[1].toLowerCase()].replace("{RULE}", path.split("/").slice(2).join("/"))
-				: await env.SHORTER_URLS.get(path.split("/")[1].toLowerCase())
+				: (
+					path.startsWith("/file/")
+					? await env.SHORTER_URLS.get("file/" + path.split("/")[2].toLowerCase() + "/" + path.split("/")[3], {...optionsKV, type: "arrayBuffer"})
+					: await env.SHORTER_URLS.get(path.split("/")[1].toLowerCase(), optionsKV)
+				)
 
 			if (!url && target == "embed")
 				return new Response(socialEmbed + "<meta property='og:url' content='https://sh0rt.zip'><meta property='og:description' content='Unknown Short-URL'><meta name='theme-color' content='#FF0000'>", {
@@ -146,12 +169,18 @@ export default {
 				redirect += (url.includes("?") ? "&" : "?") + params
 			}
 
-			if (target == "redirect") return Response.redirect(redirect, 302)
+			if (target == "redirect") {
+				if (path.startsWith("/file/"))
+					return new Response(url, {
+						headers: {
+							"Content-Type": "application/octet-stream",
+							"Content-Disposition": "attachment; filename=" + path.split("/")[3]
+						}
+					})
+				return Response.redirect(redirect, 302)
+			}
 			if (target == "api") return new Response(JSON.stringify({url: redirect}), {
-				headers: {
-					"Content-Type": "application/json",
-					...corsHeaders
-				}
+				headers: corsJSONHeaders
 			})
 			if (target == "qr") {
 				const qr = qrCode(4, "L")
@@ -182,64 +211,97 @@ export default {
 			const body = await request.text()
 			try {
 				const parsed = JSON.parse(body)
-				if (!parsed.url) return new Response(JSON.stringify({error: "missingurlbody"}), {
+				if (!parsed.url && (!parsed.files || parsed.files.length == 0)) return new Response(JSON.stringify({error: "missingurlbody"}), {
 					status: 400,
-					headers: {
-						"Content-Type": "application/json",
-						...corsHeaders
-					}
+					headers: corsJSONHeaders
 				})
-				if (parsed.url.includes("://sh0rt.zip") || !new RegExp(/https?:\/\/(([-a-z0-9]+\.)+)?[-a-z0-9]+\.[a-z0-9]+(\/.+)?/gi).test(parsed.url))
+				if (parsed.url && typeof parsed.url != "string")
 					return new Response(JSON.stringify({error: "url_invalid"}), {
 						status: 422,
-						headers: {
-							"Content-Type": "application/json",
-							...corsHeaders
-						}
+						headers: corsJSONHeaders
+					})
+				if (parsed.name && typeof parsed.name != "string")
+					return new Response(JSON.stringify({error: "name_invalid"}), {
+						status: 422,
+						headers: corsJSONHeaders
+					})
+				if (parsed.url && (parsed.url.includes("://sh0rt.zip") || !new RegExp(/^https?:\/\/(([-a-z0-9]+\.)+)?[-a-z0-9]+\.[a-z0-9]+/i).test(parsed.url)))
+					return new Response(JSON.stringify({error: "url_invalid"}), {
+						status: 422,
+						headers: corsJSONHeaders
 					})
 
 				let name = ""
 				if (parsed.name) {
 					name = parsed.name
 					if (name.startsWith("/")) name = name.slice(1)
-					if (name.startsWith("/")) return new Response(JSON.stringify({error: "name_blacklisted"}), {
+					if (name.startsWith("/") || name.length > 512) return new Response(JSON.stringify({error: "name_invalid"}), {
 						status: 422,
-						headers: {
-							"Content-Type": "application/json",
-							...corsHeaders
-						}
+						headers: corsJSONHeaders
 					})
 
 					if (blacklistedPaths.has(name.split("/")[0].trim().toLowerCase())) return new Response(JSON.stringify({error: "name_blacklisted"}), {
 						status: 422,
-						headers: {
-							"Content-Type": "application/json",
-							...corsHeaders
-						}
+						headers: corsJSONHeaders
 					})
 
-					const existing = await env.SHORTER_URLS.get(name.toLowerCase())
-					if (existing) return new Response(JSON.stringify({error: "name_alreadyexists"}), {
+					if (await env.SHORTER_URLS.get(name.toLowerCase(), optionsKV)) return new Response(JSON.stringify({error: "name_alreadyexists"}), {
 						status: 409,
-						headers: {
-							"Content-Type": "application/json",
-							...corsHeaders
-						}
+						headers: corsJSONHeaders
 					})
 				} else {
 					name = Math.random().toString(36).slice(9)
-					while (await env.SHORTER_URLS.get(name.toLowerCase())) name = Math.random().toString(36).slice(8)
+					while (await env.SHORTER_URLS.get(name, optionsKV)) name = Math.random().toString(36).slice(8)
 				}
 
+				name = name.toLowerCase()
 				const date = parsed.date ? new Date(parsed.date).getTime() : Date.now() + 1000 * 60 * 60 * 24 * 5
-				await env.SHORTER_URLS.put(name.toLowerCase(), parsed.url, {expiration: date / 1000})
-
-				return new Response(JSON.stringify({name}), {
-					status: 201,
-					headers: {
-						"Content-Type": "application/json",
-						...corsHeaders
+				if (parsed.url) await env.SHORTER_URLS.put(name, parsed.url, {
+					expiration: date / 1000,
+					metadata: {
+						created: Date.now()
 					}
+				})
+
+				const fileStatus = []
+				if (parsed.files && Array.isArray(parsed.files)) {
+					if (parsed.files.reduce((acc, file) => acc + file.content.length, 0) > 1024 * 1024 * 15) return new Response(JSON.stringify({error: "files_too_large", limit: 1024 * 1024 * 15}), {
+						status: 413,
+						headers: corsJSONHeaders
+					})
+
+					for await (const file of parsed.files) {
+						if (file.content.length > 1024 * 1024 * 5) return new Response(JSON.stringify({error: "file_too_large", limit: 1024 * 1024 * 5}), {
+							status: 413,
+							headers: corsJSONHeaders
+						})
+
+						const fileName = file.name ? file.name.trim().slice(-512).replace(/[^\w-.,]/g, "") : Math.random().toString(36).slice(8)
+						if (fileStatus.some(f => f.name == fileName)) continue
+
+						const expires = Math.round(Math.min(date / 1000, (Date.now() / 1000) + storageDuration(file.content.length)))
+						fileStatus.push({
+							uri: "https://sh0rt.zip/file/" + name + "/" + fileName,
+							name: fileName,
+							expires
+						})
+
+						await env.SHORTER_URLS.put("file/" + name + "/" + fileName, Uint8Array.from(Buffer.from(file.content.split(",")[1], "base64")), {
+							expiration: expires,
+							metadata: {
+								created: Date.now()
+							}
+						})
+					}
+				}
+
+				return new Response(JSON.stringify({
+					uri: parsed.url ? "https://sh0rt.zip/" + name : void 0,
+					name,
+					files: fileStatus.length > 0 ? fileStatus : void 0
+				}), {
+					status: 201,
+					headers: corsJSONHeaders
 				})
 			} catch (e) {
 				console.error(e, body)

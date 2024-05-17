@@ -32,7 +32,11 @@
 					<label for="url" id="target-uri">
 						Target URI:<span>*</span>:
 					</label>
-					<input id="url" type="url" name="shorturl" required>
+					<div>
+						<input id="url" type="url" name="shorturl" required>
+						<br>
+						<input id="file-upload" type="file" multiple title="Files are stored for a maximum of 30 days, depending on the size.">
+					</div>
 
 					<label for="name" id="shortName">Short name:</label>
 					<input id="name" type="text" name="shortname">
@@ -77,21 +81,23 @@
 						<button type="button" id="copyButton">Copy</button>
 						<button type="button" id="shareButton" hidden>Share</button>
 					</div>
-
-					<div id="qrimage-container"></div>
 				</div>
 			</fieldset>
 		</main>
 		<footer>
-			<a href="https://github.com/DEVTomatoCake/Shorter" title="Source code" target="_blank" rel="noopener noreferrer">
-				<img src="./assets/github.webp" alt="GitHub icon linking to the source code of the website" width="32" height="32">
-			</a>
-			<a href="https://discord.gg/ZqzFUC8qe9" title="Support server" target="_blank" rel="noopener noreferrer">
-				<img src="./assets/discord.webp" alt="Discord icon linking to the developers support server" width="40" height="30">
-			</a>
-			<a href="https://docs.sh0rt.zip" title="API docs">
-				<img src="./assets/document-text-outline.svg" alt="API docs" width="30" height="30">
-			</a>
+			<div>
+				<a href="https://github.com/DEVTomatoCake/Shorter" title="Source code" target="_blank" rel="noopener noreferrer">
+					<img src="./assets/github.webp" alt="GitHub icon linking to the source code of the website" width="32" height="32">
+				</a>
+				<a href="https://discord.gg/ZqzFUC8qe9" title="Support server" target="_blank" rel="noopener noreferrer">
+					<img src="./assets/discord.webp" alt="Discord icon linking to the developers support server" width="40" height="30">
+				</a>
+				<a href="https://docs.sh0rt.zip" title="API docs">
+					<img src="./assets/document-text-outline.svg" alt="API docs" width="30" height="30">
+				</a>
+			</div>
+
+			<img src="./assets/powered-by-workers.png" alt="Powered by Cloudflare Workers" width="235" height="50">
 		</footer>
 	</body>
 </html>

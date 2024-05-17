@@ -9,7 +9,7 @@
 	],
 	"info": {
 		"description": "This API lets you create short URLs and get information about them.",
-		"version": "1.4.0",
+		"version": "1.5.0",
 		"title": "Short URL API",
 		"contact": {
 			"url": "https://discord.gg/ZqzFUC8qe9"
@@ -78,6 +78,7 @@
 									],
 									"properties": {
 										"url": {
+											"description": "The target URL of the short URL, can also be a data URL if the target is a file",
 											"type": "string",
 											"format": "url",
 											"example": "https://github.com/DEVTomatoCake/Bundbot"
@@ -88,7 +89,7 @@
 						}
 					},
 					"404": {
-						"description": "Unknown short URL"
+						"description": "The requested short URL doesn't exist"
 					}
 				}
 			}
@@ -220,6 +221,28 @@
 										"format": "url",
 										"example": "https://github.com/DEVTomatoCake/Bundbot"
 									},
+									"files": {
+										"description": "The files to upload",
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"content"
+											],
+											"properties": {
+												"name": {
+													"description": "Name of the file (including the extension), randomly generated if not provided",
+													"type": "string",
+													"example": "index.js"
+												},
+												"content": {
+													"description": "Base64 encoded file content",
+													"type": "string",
+													"example": "data:application/text;base64,<base64 encoded content>"
+												}
+											}
+										}
+									},
 									"name": {
 										"description": "Name of the short URL to use after https://sh0rt.zip/",
 										"type": "string",
@@ -227,10 +250,10 @@
 										"default": "<4 random characters>"
 									},
 									"date": {
-										"description": "When to delete the short URL. Must be parseable using JavaScripts `Date()`.",
+										"description": "When to delete the short URL. Must be parseable using JavaScripts `Date()` function.",
 										"type": "string",
 										"format": "date-time",
-										"example": "2024-02-24T14:58:26.710Z",
+										"example": "2024-05-24T14:58:26.710Z",
 										"default": "<five days from now>"
 									}
 								}
@@ -249,9 +272,46 @@
 										"name"
 									],
 									"properties": {
+										"uri": {
+											"description": "Full URL of the created short URL, if a URL was provided",
+											"type": "string",
+											"example": "https://sh0rt.zip/bundbot"
+										},
 										"name": {
+											"description": "Name of the created short URL to use after https://sh0rt.zip/",
 											"type": "string",
 											"example": "bundbot"
+										},
+										"files": {
+											"description": "The uploaded files",
+											"type": "array",
+											"items": {
+												"description": "The file path of a file that was uploaded",
+												"type": "object",
+												"required": [
+													"uri",
+													"name",
+													"expires"
+												],
+												"properties": {
+													"uri": {
+														"description": "The full URI to the file",
+														"type": "string",
+														"example": "file/bundbot/index.js"
+													},
+													"name": {
+														"description": "The file name of the file",
+														"type": "string",
+														"example": "index.js"
+													},
+													"expires": {
+														"description": "When the file will be deleted",
+														"type": "string",
+														"format": "date-time",
+														"example": "2024-05-24T14:58:26.710Z"
+													}
+												}
+											}
 										}
 									}
 								}
@@ -300,6 +360,34 @@
 							}
 						}
 					},
+					"413": {
+						"description": "The total file size or the one of a single file in the payload is too large.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"required": [
+										"error",
+										"limit"
+									],
+									"properties": {
+										"error": {
+											"type": "string",
+											"enum": [
+												"file_too_large",
+												"files_too_large"
+											]
+										},
+										"limit": {
+											"description": "The maximum file/total size in bytes, depending on the error.",
+											"type": "number",
+											"example": 5242880
+										}
+									}
+								}
+							}
+						}
+					},
 					"422": {
 						"description": "Invalid input which prevents the short URL from being created, such as an invalid URL or a redirect loop.",
 						"content": {
@@ -313,8 +401,9 @@
 										"error": {
 											"type": "string",
 											"enum": [
-												"url_invalid",
-												"name_blacklisted"
+												"name_invalid",
+												"name_blacklisted",
+												"url_invalid"
 											]
 										}
 									}

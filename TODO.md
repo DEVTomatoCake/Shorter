@@ -45,8 +45,6 @@ Angemeldete Nutzer:
 
 - Wenn Link nicht gefunden custom HTMLseite mit link zu startseite
 - /report zum Melden von Links
-- cf Turnstile im hintergrund?
-- Kleine Dateien teilen
 - If a submitted URL is a redirect, the final destination is stored to avoid nested redirects
 - zufällige wörter statt zeichen als option
 	- länge der zeichen und characterset festlegen können: a-z A-Z 0-9 zerowidthzeichen tiernamen objektnamen emojis usw.
