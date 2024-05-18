@@ -4,7 +4,7 @@ permissions:
 
 on:
   push:
-    paths: ["api-docs.json", ".github/workflows/bump_sh_deploy.yml"]
+    paths: ["api-docs.json"]
 
 jobs:
   deploy-doc:
@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Deploy API documentation
-        uses: bump-sh/github-action@v1
+        uses: bump-sh/github-action@060fc2a160a6f859c1fbb518e0ea3b02814d2a3c
         with:
           doc: 41ac0bef-ea5a-44a1-a763-eb10d17d4b71
           token: ${{ secrets.BUMP_SH_TOKEN }}
