@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Comment pull request with API diff
-        uses: bump-sh/github-action@060fc2a160a6f859c1fbb518e0ea3b02814d2a3c
+        uses: bump-sh/github-action@ce67b2e1690da8cb4b5c1333dec4b5acdbfd99cc
         with:
           doc: 41ac0bef-ea5a-44a1-a763-eb10d17d4b71
           token: ${{ secrets.BUMP_SH_TOKEN }}
