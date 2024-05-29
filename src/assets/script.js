@@ -221,7 +221,7 @@ const createURL = async () => {
 		}
 	}
 
-	const res = await fetch(location.protocol == "https:" ? location.origin : "https://sh0rt.zip", {
+	const res = await fetch(location.protocol == "https:" ? location.origin : "https://sh0rt.zip/", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
