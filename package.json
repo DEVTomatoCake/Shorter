@@ -27,7 +27,7 @@
     "@cloudflare/kv-asset-handler": "^0.3.3"
   },
   "devDependencies": {
-    "@html-eslint/eslint-plugin": "^0.24.1",
+    "@html-eslint/eslint-plugin": "^0.25.0",
     "@html-eslint/parser": "^0.25.0",
     "@stylistic/eslint-plugin-js": "^2.2.2",
     "clean-css": "^5.3.3",
