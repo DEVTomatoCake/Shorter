@@ -24,7 +24,7 @@
     "deploy": "node build.js && wrangler deploy"
   },
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.3.2"
+    "@cloudflare/kv-asset-handler": "^0.3.3"
   },
   "devDependencies": {
     "@html-eslint/eslint-plugin": "^0.24.1",
